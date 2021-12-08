@@ -1,0 +1,4 @@
+1- sistemare stringId per i casi con identificatori specifici come host
+2- far diventare atomi le stringhe finale, sistemare metodo compress
+3- finire il primo caso di URI (prima riga delle casistiche, schema ad inizio file)
+4- andare avanti nel progetto
