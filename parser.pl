@@ -66,5 +66,5 @@ stringId(Cs, Cs, []).
 %metodo per unire la lista in una stringa
 compress([], []) :- !.
 compress(List, Result) :- 
-    atom_chars(List1, List), 
-    string_to_atom(Result, List1).
+    string_chars(List1, List), 
+    atom_string(Result, List1).
