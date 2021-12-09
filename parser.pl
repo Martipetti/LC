@@ -3,15 +3,18 @@
 
 uri_parse(URIString, URI) :-
     string_chars(URIString, Stringa), %write(Stringa), nl,
-    gestion(Stringa, Scheme, Userinfo, Host, Port, PortRest), 
-    compress(PortRest, PortRest2),
-    URI = uri(Scheme, Userinfo, Host, Port, PortRest2).
+    gestion(Stringa, Scheme, Userinfo, Host, Port, Path, Query, Fragment), 
+    URI = uri(Scheme, Userinfo, Host, Port, Path, Query, Fragment).
     %URI = uri(Scheme, Userinfo, Host, Port, Path, Query, Fragment).
 
 %gestione generale dell'uri
-gestion(Stringa, Scheme, Userinfo, Host, Port, PortRest) :-
+gestion(Stringa, Scheme, Userinfo, Host, Port, Path, Query, Fragment) :-
+    %metodo per gestione scheme
     scheme(Stringa, Scheme, SchemeRest), %write(Scheme), nl, write(SchemeRest), nl,
-    authorithy(SchemeRest, Userinfo, Host, Port, PortRest).
+    %metodo per gestione parte authorithy 
+    authorithy(SchemeRest, Userinfo, Host, Port, PortRest),
+    %metodo per gestione di path, query e fragment
+    coda(PortRest, Path, Query, Fragment).
 
 %gestione dello scheme con controllo ':'
 scheme(URIString, Scheme, StringAgg) :-
@@ -57,11 +60,57 @@ authorithy([S1, S2 | SchemeRest], [], Host, [], HostRest) :-
     stringId(SchemeRest, HostRest, HostProv), 
     compress(HostProv, Host).
 
+%gestione metodo coda
+coda([C | PortRest], Path, Query, Fragment) :-
+    C == '/',
+    pathSlash(PortRest, PathRest, Path),
+    queryQuestion(PathRest, QueryRest, Query),
+    fragmentHastag(QueryRest, [], Fragment).
+coda([], [], [], []).
+%metodi usati in coda
+pathSlash([C | PortRest], PathRest, Path) :-
+    C == '/', !,
+    pathId(PortRest, PathRest, PathProv),
+    compress(PathProv, Path).
+pathSlash(PortRest, PortRest, []).
+
+queryQuestion([C | PathRest], QueryRest, Query) :-
+    C == '?', !,
+    queryId(PathRest, QueryRest, QueryProv),
+    compress(QueryProv, Query).
+queryQuestion(PathRest, PathRest, []).
+
+fragmentHastag([C | QueryRest], FragmentRest, Fragment) :-
+    C == '#', !,
+    fragmentId(QueryRest, FragmentRest, FragmentProv),
+    compress(FragmentProv, Fragment).
+fragmentHastag(QueryRest, QueryRest, []) :-
+    QueryRest == [].
+
+
 %identificazione stringa dello scheme
 stringId([C|Cs], Cs1, [C|Is]) :- 
     C\='/', C\='?', C\='#', C\='@', C\=':',!, 
     stringId(Cs, Cs1, Is).
 stringId(Cs, Cs, []).
+
+%identificazione path
+pathId([C|Cs], Cs1, [C|Is]) :-
+    C\='?', C\='#', C\='@', C\=':',!, 
+    stringId(Cs, Cs1, Is).
+pathId(Cs, Cs, []).
+
+%identificazione query
+queryId([C|Cs], Cs1, [C|Is]) :-
+    C\='#', !, 
+    stringId(Cs, Cs1, Is).
+queryId(Cs, Cs, []).
+
+%identificazione fragment
+fragmentId([C|Cs], Cs1, [C|Is]) :-
+    !, %non sicuro di questo cut
+    stringId(Cs, Cs1, Is).
+fragmentId(Cs, Cs, []).
 
 %metodo per unire la lista in una stringa
 compress([], []) :- !.
