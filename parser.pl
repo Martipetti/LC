@@ -69,19 +69,22 @@ coda([C | PortRest], Path, Query, Fragment) :-
 coda([], [], [], []).
 %metodi usati in coda
 pathSlash([C | PortRest], PathRest, Path) :-
-    C == '/', !,
+    C == '/', 
+    !,
     pathId(PortRest, PathRest, PathProv),
     compress(PathProv, Path).
 pathSlash(PortRest, PortRest, []).
 
 queryQuestion([C | PathRest], QueryRest, Query) :-
-    C == '?', !,
+    C == '?',
+    !,
     queryId(PathRest, QueryRest, QueryProv),
     compress(QueryProv, Query).
 queryQuestion(PathRest, PathRest, []).
 
 fragmentHastag([C | QueryRest], FragmentRest, Fragment) :-
-    C == '#', !,
+    C == '#', 
+    !,
     fragmentId(QueryRest, FragmentRest, FragmentProv),
     compress(FragmentProv, Fragment).
 fragmentHastag(QueryRest, QueryRest, []).
@@ -102,7 +105,8 @@ hostId(Cs, Cs, []).
 
 %identificazione path
 pathId([C|Cs], Cs1, [C|Is]) :-
-    C\='?', C\='#', C\='@', C\=':',!, 
+    C\='?', C\='#', C\='@', C\=':',
+    !, 
     stringId(Cs, Cs1, Is).
 pathId(Cs, Cs, []).
 
@@ -137,13 +141,14 @@ indirizzoIP([C1, C2, C3, C4, C5, C6, C7|Cs], Cs, [C1,C2,C3,C4,C5,C6,C7]) :-
 
 %identificazione query
 queryId([C|Cs], Cs1, [C|Is]) :-
-    C\='#', !, 
+    C\='#', 
+    !, 
     stringId(Cs, Cs1, Is).
 queryId(Cs, Cs, []).
 
 %identificazione fragment
 fragmentId([C|Cs], Cs1, [C|Is]) :-
-    !, %non sicuro di questo cut
+    !, 
     stringId(Cs, Cs1, Is).
 fragmentId(Cs, Cs, []).
 
