@@ -166,7 +166,7 @@ queryId(Cs, Cs, []).
 %identificazione fragment
 fragmentId([C|Cs], Cs1, [C|Is]) :-
     !, 
-    stringId(Cs, Cs1, Is).
+    fragmentId(Cs, Cs1, Is).
 fragmentId(Cs, Cs, []).
 
 %metodo per unire la lista in una stringa
