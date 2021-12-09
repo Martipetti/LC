@@ -1,6 +1,5 @@
 - contrillare metodi identificatori (se sono tutti)
 - testare bene il primo caso
 - Casi scheme speciali
-- Caso senza authority
 - Caso host ip
 - andare avanti nel progetto
