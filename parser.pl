@@ -74,6 +74,14 @@ coda([C | PortRest], Path, Query, Fragment) :-
     queryQuestion(PathRest, QueryRest, Query),
     fragmentHastag(QueryRest, [], Fragment).
 coda([], [], [], []).
+
+%gestione metodo coda senza authority
+coda(PortRest, Path, Query, Fragment) :-
+    pathSlash(PortRest, PathRest, Path), 
+    queryQuestion(PathRest, QueryRest, Query),
+    fragmentHastag(QueryRest, [], Fragment).
+    coda([], [], [], []).
+
 %metodi usati in coda
 pathSlash(PortRest, PathRest, Path) :-
     !,
