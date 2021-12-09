@@ -102,6 +102,9 @@ hostId([C|Cs], Cs1, [C|Is]) :-
     stringId(Cs, Cs1, Is).
 hostId(Cs, Cs, []).
 
+%host con IP
+hostId(Cs, Cs1, [Is]):- indirizzoIP(Cs, Cs1, Is). 
+
 %identificazione path
 pathId([C|Cs], Cs1, [C|Is]) :-
     C\='?', C\='#', C\='@', C\=':',
