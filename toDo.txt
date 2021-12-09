@@ -1,5 +1,6 @@
-1- sistemare caso ip e contrillare metodi identificatori (se sono tutti)
-2- fare caso host ip
-3- gestire correttamente ip
-4- testare bene il primo caso
-5- andare avanti nel progetto
+- sistemare caso ip e contrillare metodi identificatori (se sono tutti)
+- fare caso host ip
+- gestire correttamente ip
+- controllare e gestire numero port
+- testare bene il primo caso
+- andare avanti nel progetto
