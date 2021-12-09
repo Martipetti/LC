@@ -2,4 +2,5 @@
 - testare bene il primo caso
 - Casi scheme speciali
 - Caso host ip
+- Path ZOS
 - andare avanti nel progetto
