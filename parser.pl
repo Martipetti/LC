@@ -160,7 +160,7 @@ indirizzoIP([C1, C2, C3, C4, C5, C6, C7|Cs], Cs, [C1,C2,C3,C4,C5,C6,C7]) :-
 queryId([C|Cs], Cs1, [C|Is]) :-
     C\='#', 
     !, 
-    stringId(Cs, Cs1, Is).
+    queryId(Cs, Cs1, Is).
 queryId(Cs, Cs, []).
 
 %identificazione fragment
