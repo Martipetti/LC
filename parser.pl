@@ -126,6 +126,15 @@ digit(C) :-
     C=='8'; 
     C=='9'.
 
+%numeriIP
+digit2(C):-
+    C >=0,
+    C=<255.
+
+% controllo indirizzo IP
+indirizzoIP([C1, C2, C3, C4, C5, C6, C7|Cs], Cs, [C1,C2,C3,C4,C5,C6,C7]) :- 
+    digit2(C1), C2=='.', digit2(C3), C4=='.', digit2(C5), C6=='.', digit2(C7).
+
 %identificazione query
 queryId([C|Cs], Cs1, [C|Is]) :-
     C\='#', !, 
