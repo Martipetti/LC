@@ -15,6 +15,13 @@ gestion(Stringa, Scheme, Userinfo, Host, Port, Path, Query, Fragment) :-
     authorithy(SchemeRest, Userinfo, Host, Port, PortRest),
     %metodo per gestione di path, query e fragment
     coda(PortRest, Path, Query, Fragment).
+    
+%gestione generale dell'uri senza authority
+gestion(Stringa, Scheme, [], [], [], Path, Query, Fragment) :-
+    %metodo per gestione scheme
+    scheme(Stringa, Scheme, SchemeRest), 
+    %metodo per gestione di path, query e fragment
+    coda(SchemeRest, Path, Query, Fragment).    
 
 %gestione dello scheme con controllo ':'
 scheme(URIString, Scheme, StringAgg) :-
