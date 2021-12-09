@@ -3,4 +3,5 @@
 - gestire correttamente ip (numeri compresi tra 0<=X<=255)
 - testare bene il primo caso
 - Controllare path
+- Casi scheme speciali
 - andare avanti nel progetto
