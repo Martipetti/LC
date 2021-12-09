@@ -1,4 +1,5 @@
-1- sistemare stringId per i casi con identificatori specifici come host
-2- far diventare atomi le stringhe finale, sistemare metodo compress
-3- finire il primo caso di URI (prima riga delle casistiche, schema ad inizio file)
-4- andare avanti nel progetto
+1- sistemare caso ip e contrillare metodi identificatori (se sono tutti)
+2- fare caso host ip
+3- gestire correttamente ip
+4- testare bene il primo caso
+5- andare avanti nel progetto
