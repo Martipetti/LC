@@ -34,7 +34,7 @@ authorithy([S1, S2 | SchemeRest], Userinfo, Host, Port, PortRest) :-
     compress(HostProv, Host),
     C2 == ':',
     !,
-    stringId(HostRest, PortRest, PortProv),
+    portId(HostRest, PortRest, PortProv),
     compress(PortProv, Port).
 %caso userinfo
 authorithy([S1, S2 | SchemeRest], Userinfo, Host, [], HostRest) :- 
@@ -52,7 +52,7 @@ authorithy([S1, S2 | SchemeRest], [], Host, Port, PortRest) :-
     compress(HostProv, Host),
     C == ':',
     !,
-    stringId(HostRest, PortRest, PortProv),
+    portId(HostRest, PortRest, PortProv),
     compress(PortProv, Port).
 %caso senza port ne useinfo
 authorithy([S1, S2 | SchemeRest], [], Host, [], HostRest) :- 
@@ -98,6 +98,26 @@ pathId([C|Cs], Cs1, [C|Is]) :-
     C\='?', C\='#', C\='@', C\=':',!, 
     stringId(Cs, Cs1, Is).
 pathId(Cs, Cs, []).
+
+%identificazione port
+portId([C|Cs], Cs1, [C|Is]) :-
+    digit(C),
+    !,
+    portId(Cs, Cs1, Is).
+    portId(Cs, Cs, []).
+
+%controllo numeri
+digit(C) :- 
+    C=='0'; 
+    C=='1'; 
+    C=='2'; 
+    C=='3'; 
+    C=='4'; 
+    C=='5'; 
+    C=='6'; 
+    C=='7'; 
+    C=='8'; 
+    C=='9'.
 
 %identificazione query
 queryId([C|Cs], Cs1, [C|Is]) :-
