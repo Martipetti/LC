@@ -68,8 +68,7 @@ coda([C | PortRest], Path, Query, Fragment) :-
     fragmentHastag(QueryRest, [], Fragment).
 coda([], [], [], []).
 %metodi usati in coda
-pathSlash([C | PortRest], PathRest, Path) :-
-    C == '/', 
+pathSlash(PortRest, PathRest, Path) :-
     !,
     pathId(PortRest, PathRest, PathProv),
     compress(PathProv, Path).
