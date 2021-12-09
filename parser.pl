@@ -10,7 +10,7 @@ uri_parse(URIString, URI) :-
 %gestione generale dell'uri
 gestion(Stringa, Scheme, Userinfo, Host, Port, Path, Query, Fragment) :-
     %metodo per gestione scheme
-    scheme(Stringa, Scheme, SchemeRest), %write(Scheme), nl, write(SchemeRest), nl,
+    scheme(Stringa, Scheme, SchemeRest), 
     %metodo per gestione parte authorithy 
     authorithy(SchemeRest, Userinfo, Host, Port, PortRest),
     %metodo per gestione di path, query e fragment
@@ -25,7 +25,7 @@ gestion(Stringa, Scheme, [], [], [], Path, Query, Fragment) :-
 
 %gestione dello scheme con controllo ':'
 scheme(URIString, Scheme, StringAgg) :-
-    stringId(URIString, Stringa, SchemeProv), %write(Stringa), nl, write(SchemeProv), nl,
+    stringId(URIString, Stringa, SchemeProv), 
     duepunti(Stringa, StringAgg), 
     compress(SchemeProv, Scheme).
 duepunti([C | Lista], Lista) :-
