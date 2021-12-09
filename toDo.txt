@@ -1,5 +1,6 @@
 - sistemare caso ip e contrillare metodi identificatori (se sono tutti)
 - fare caso host ip
+- identificatore host
 - gestire correttamente ip
 - testare bene il primo caso
 - Controllare path
