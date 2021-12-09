@@ -1,4 +1,5 @@
 - contrillare metodi identificatori (se sono tutti)
 - testare bene il primo caso
 - Casi scheme speciali
+- Caso host ip
 - andare avanti nel progetto
