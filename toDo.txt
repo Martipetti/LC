@@ -3,4 +3,5 @@
 - gestire correttamente ip
 - controllare e gestire numero port
 - testare bene il primo caso
+- Controllare fragment 
 - andare avanti nel progetto
