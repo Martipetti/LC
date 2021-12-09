@@ -84,8 +84,7 @@ fragmentHastag([C | QueryRest], FragmentRest, Fragment) :-
     C == '#', !,
     fragmentId(QueryRest, FragmentRest, FragmentProv),
     compress(FragmentProv, Fragment).
-fragmentHastag(QueryRest, QueryRest, []) :-
-    QueryRest == [].
+fragmentHastag(QueryRest, QueryRest, []).
 
 
 %identificazione stringa dello scheme
