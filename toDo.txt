@@ -1,7 +1,6 @@
 - sistemare caso ip e contrillare metodi identificatori (se sono tutti)
 - fare caso host ip
 - gestire correttamente ip
-- controllare e gestire numero port
 - testare bene il primo caso
-- Controllare fragment 
+- Controllare path
 - andare avanti nel progetto
