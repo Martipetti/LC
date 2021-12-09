@@ -30,7 +30,7 @@ authorithy([S1, S2 | SchemeRest], Userinfo, Host, Port, PortRest) :-
     stringId(SchemeRest, [C1 | UserinfoRest], UserinfoProv), 
     compress(UserinfoProv, Userinfo), %write(Userinfo), nl,
     C1 == '@',
-    stringId(UserinfoRest, [C2 | HostRest], HostProv),
+    hostId(UserinfoRest, [C2 | HostRest], HostProv),
     compress(HostProv, Host),
     C2 == ':',
     !,
@@ -43,7 +43,7 @@ authorithy([S1, S2 | SchemeRest], Userinfo, Host, [], HostRest) :-
     compress(UserinfoProv, Userinfo),
     C == '@',
     !,
-    stringId(UserinfoRest, HostRest, HostProv),
+    hostId(UserinfoRest, HostRest, HostProv),
     compress(HostProv, Host).
 %caso port
 authorithy([S1, S2 | SchemeRest], [], Host, Port, PortRest) :- 
@@ -57,7 +57,7 @@ authorithy([S1, S2 | SchemeRest], [], Host, Port, PortRest) :-
 %caso senza port ne useinfo
 authorithy([S1, S2 | SchemeRest], [], Host, [], HostRest) :- 
     S1 == '/', S2 == '/',
-    stringId(SchemeRest, HostRest, HostProv), 
+    hostId(SchemeRest, HostRest, HostProv), 
     compress(HostProv, Host).
 
 %gestione metodo coda
@@ -92,6 +92,13 @@ stringId([C|Cs], Cs1, [C|Is]) :-
     C\='/', C\='?', C\='#', C\='@', C\=':',!, 
     stringId(Cs, Cs1, Is).
 stringId(Cs, Cs, []).
+
+%identificazione host
+hostId([C|Cs], Cs1, [C|Is]) :- 
+    C\='/', C\='?', C\='#', C\='@', C\=':', C\='.',
+    !, 
+    stringId(Cs, Cs1, Is).
+hostId(Cs, Cs, []).
 
 %identificazione path
 pathId([C|Cs], Cs1, [C|Is]) :-
