@@ -15,6 +15,27 @@ gestion([C1, C2, C3, C4, C5, C6 | SchemeRest], Scheme, Userinfo, Host, [], [], [
     %metodo gestione userinfo e host
     codaM(SchemeRest, Userinfo, Host).
 
+%metodi per news
+gestion([C1, C2, C3, C4| SchemeRest], Scheme, [] , Host, [], [], [], []) :-
+    %controllo sintassi 'news'
+    news([C1, C2, C3, C4], Scheme), !,
+    %metodo gestione host
+    codaN(SchemeRest, Host).
+
+%metodi per tel 
+gestion([C1, C2, C3| SchemeRest], Scheme, Userinfo, [], [], [], [], []) :-
+    %controllo sintassi 'tel'
+    tel([C1, C2, C3], Scheme), !,
+    %metodo gestione userinfo 
+    codaT(SchemeRest, Userinfo).
+
+%metodi per fax
+gestion([C1, C2, C3| SchemeRest], Scheme, Userinfo, [], [], [], [], []) :-
+    %controllo sintassi 'fax'
+    fax([C1, C2, C3], Scheme), !,
+    %metodo gestione userinfo 
+    codaT(SchemeRest, Userinfo).
+
 %metodi per caso 1 (con authority)
 gestion(Stringa, Scheme, Userinfo, Host, Port, Path, Query, Fragment) :-
     %metodo gestione scheme
@@ -51,6 +72,35 @@ hostMailto(UserinfoRest, Host) :-
     hostId(UserinfoRestAgg, [], HostProv), 
     compress(HostProv, Host).
 hostMailto([], []).
+
+%metodo news
+news([C1, C2, C3, C4], Scheme) :-
+    C1 == 'n', C2 == 'e', C3 == 'w',
+    C4 == 's',
+    compress([C1, C2, C3, C4], Scheme).
+
+%coda scheme news
+codaN(SchemeRest, Host) :-
+    duepunti(SchemeRest, SchemeRestAgg), 
+    hostId(SchemeRestAgg, [], HostProv),
+    compress(HostProv, Host).
+
+%metodo tel
+tel([C1, C2, C3], Scheme) :-
+    C1 == 't', C2 == 'e', C3 == 'l',
+    compress([C1, C2, C3], Scheme).
+
+%coda scheme tel e fax
+codaT(SchemeRest, Userinfo) :-
+    duepunti(SchemeRest, SchemeRestAgg), 
+    stringId(SchemeRestAgg, [], UserinfoProv),
+    compress(UserinfoProv, Userinfo).
+
+%metodo fax
+fax([C1, C2, C3], Scheme) :-
+    C1 == 'f', C2 == 'a', C3 == 'x',
+    compress([C1, C2, C3], Scheme).
+
 
 %gestione dello scheme con controllo ':'
 scheme(URIString, Scheme, StringAgg) :-
@@ -106,14 +156,14 @@ coda([C | PortRest], Path, Query, Fragment) :-
 coda([], [], [], []).
 %gestione metodo coda senza authority
 coda(PortRest, Path, Query, Fragment) :-
-    pathSlash(PortRest, PathRest, Path), 
+    pathSlash(PortRest, PathRest, Path),
     queryQuestion(PathRest, QueryRest, Query),
     fragmentHastag(QueryRest, [], Fragment).
 coda([], [], [], []).
 
 %metodi usati in coda
 pathSlash(PortRest, PathRest, Path) :-
-    !, %%%
+    !, 
     pathId(PortRest, PathRest, PathProv),
     compress(PathProv, Path).
 pathSlash(PortRest, PortRest, []).
@@ -194,7 +244,7 @@ digit(C):-
 pathId([C|Cs], Cs1, [C|Is]) :-
     C\='?', C\='#', C\='@', C\=':',
     !, 
-    stringId(Cs, Cs1, Is).
+    pathId(Cs, Cs1, Is).
 pathId(Cs, Cs, []).
 
 %identificazione port
@@ -202,7 +252,8 @@ portId([C|Cs], Cs1, [C|Is]) :-
     digit(C),
     !,
     portId(Cs, Cs1, Is).
-    portId(Cs, Cs, []).
+portId(Cs, Cs, []).
+
 
 %identificazione query
 queryId([C|Cs], Cs1, [C|Is]) :-
