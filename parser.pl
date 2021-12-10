@@ -10,19 +10,15 @@ uri_parse(URIString, URI) :-
 %metodo di gestione generale dell'uri 
 %metodi per mailto 
 gestion([C1, C2, C3, C4, C5, C6 | SchemeRest], Scheme, Userinfo, Host, [], [], [], []) :-
-    mailto([C1, C2, C3, C4, C5, C6]), !,
-    duepunti(SchemeRest, SchemeRestAgg), 
-    compress([C1, C2, C3, C4, C5, C6], Scheme),
-    stringId(SchemeRestAgg, UserinfoRest, UserinfoProv),
-    compress(UserinfoProv, Userinfo),
-    at(UserinfoRest, UserinfoRestAgg),
-    hostId(UserinfoRestAgg, [], HostProv),
-    compress(HostProv, Host).
+    %controllo sintassi 'mailto'
+    mailto([C1, C2, C3, C4, C5, C6], Scheme), !,
+    %metodo gestione userinfo e host
+    codaM(SchemeRest, Userinfo, Host).
 
 %metodi per caso 1 (con authority)
 gestion(Stringa, Scheme, Userinfo, Host, Port, Path, Query, Fragment) :-
     %metodo gestione scheme
-    scheme(Stringa, Scheme, SchemeRest), 
+    scheme(Stringa, Scheme, SchemeRest), %!,
     %metodo gestione parte authorithy 
     authorithy(SchemeRest, Userinfo, Host, Port, PortRest),
     %metodo gestione di path, query e fragment
@@ -31,15 +27,30 @@ gestion(Stringa, Scheme, Userinfo, Host, Port, Path, Query, Fragment) :-
 %metodi per caso 2 (senza authority)
 gestion(Stringa, Scheme, [], [], [], Path, Query, Fragment) :-
     %metodo per gestione scheme
-    scheme(Stringa, Scheme, SchemeRest), 
+    scheme(Stringa, Scheme, SchemeRest), %!,
     %metodo per gestione di path, query e fragment
     coda(SchemeRest, Path, Query, Fragment).    
 
 
 %metodo mailto
-mailto([C1, C2, C3, C4, C5, C6]) :-
+mailto([C1, C2, C3, C4, C5, C6], Scheme) :-
     C1 == 'm', C2 == 'a', C3 == 'i',
-    C4 == 'l', C5 == 't', C6 == 'o'.
+    C4 == 'l', C5 == 't', C6 == 'o',
+    compress([C1, C2, C3, C4, C5, C6], Scheme).
+
+%coda scheme mailto
+codaM(SchemeRest, Userinfo, Host) :-
+    duepunti(SchemeRest, SchemeRestAgg), 
+    stringId(SchemeRestAgg, UserinfoRest, UserinfoProv),
+    compress(UserinfoProv, Userinfo),
+    hostMailto(UserinfoRest, Host).
+
+%gestione host scheme mailto
+hostMailto(UserinfoRest, Host) :-
+    at(UserinfoRest, UserinfoRestAgg),!,  
+    hostId(UserinfoRestAgg, [], HostProv), 
+    compress(HostProv, Host).
+hostMailto([], []).
 
 %gestione dello scheme con controllo ':'
 scheme(URIString, Scheme, StringAgg) :-
@@ -53,7 +64,7 @@ scheme(URIString, Scheme, StringAgg) :-
 authorithy([S1, S2 | SchemeRest], Userinfo, Host, Port, PortRest) :- 
     S1 == '/', S2 == '/',
     stringId(SchemeRest, [C1 | UserinfoRest], UserinfoProv), 
-    compress(UserinfoProv, Userinfo), %write(Userinfo), nl,
+    compress(UserinfoProv, Userinfo), 
     C1 == '@',
     hostId(UserinfoRest, [C2 | HostRest], HostProv),
     compress(HostProv, Host),
@@ -138,8 +149,9 @@ hostId([N1, N2, N3, P1, N4, N5, N6, P2, N7, N8, N9, P3, N10, N11, N12 | Cs], Cs,
     P2 == '.',
     is_digit(N7), is_digit(N8), is_digit(N9),
     P3 == '.',
-    is_digit(N10), is_digit(N11), is_digit(N12), !,
-    ip([N1, N2, N3, P1, N4, N5, N6, P2, N7, N8, N9, P3, N10, N11, N12]).
+    is_digit(N10), is_digit(N11), is_digit(N12), 
+    !,
+    ip([N1, N2, N3, N4, N5, N6, N7, N8, N9, N10, N11, N12]).
 
 %identificazione host
 hostId([C|Cs], Cs1, [C|Is]) :- 
@@ -150,11 +162,29 @@ hostId(Cs, Cs, []).
 
 %controllo su ip
 ip([N1, N2, N3, N4, N5, N6, N7, N8, N9, N10, N11, N12]) :-
-    X = (N1*100 + N2*10 + N3), 
-    Y is (N4*100 + N5*10 + N6), 
-    Z is (N7*100 + N8*10 + N9),
-    T is (N10*100 + N11*10 + N12),
-    digit(X), digit(Y), digit(Z), digit(T).
+    fun(N1, N2, N3), 
+    fun(N4, N5, N6),
+    fun(N7, N8, N9),
+    fun(N10, N11, N12).
+%funzione
+fun(C1, C2, C3) :-
+    conv(C1, N1),
+    conv(C2, N2), 
+    conv(C3, N3),
+    O = (N1*100 + N2*10 + N3), 
+    digit(O).
+%convertire valori
+conv(C, N) :-
+    C = '0', N = 0;
+    C = '1', N = 1;
+    C = '2', N = 2;
+    C = '3', N = 3; 
+    C = '4', N = 4;
+    C = '5', N = 5; 
+    C = '6', N = 6;
+    C = '7', N = 7; 
+    C = '8', N = 8;
+    C = '9', N = 9. 
 %numeriIP
 digit(C):-
     C >=0,
