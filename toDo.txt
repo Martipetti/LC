@@ -1,5 +1,6 @@
 - contrillare metodi identificatori (se sono tutti)
 - testare bene il primo caso
-- Casi scheme speciali
-- Caso host ip
+- Casi scheme zos
+- Controllare i cut
+- Sistemre portId (porta di default 80)
 - andare avanti nel progetto
