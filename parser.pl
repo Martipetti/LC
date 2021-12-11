@@ -2,9 +2,29 @@ uri_parse(URIString, URI) :-
     %passaggio dalla stringa a una lista di caratteri
     string_chars(URIString, Stringa), 
     %metodo che in base alla lista passa a stati di metodi diversi
-    gestion(Stringa, Scheme, Userinfo, Host, Port, Path, Query, Fragment), 
+    gestion(Stringa, Scheme, Userinfo, Host, Port, Path, Query, Fragment), !,
     %output
     URI = uri(Scheme, Userinfo, Host, Port, Path, Query, Fragment).
+
+%parser usato da uri_display
+uri_parse2(URIString, URI) :-
+    %passaggio dalla stringa a una lista di caratteri
+    string_chars(URIString, Stringa), 
+    %metodo che in base alla lista passa a stati di metodi diversi
+    gestion(Stringa, Scheme, Userinfo, Host, Port, Path, Query, Fragment), !,
+    %output
+    URI = [Scheme, Userinfo, Host, Port, Path, Query, Fragment].
+
+%stampa su terminale
+uri_display(URIString) :-
+    %lista(['Scheme', 'Userinfo', 'Host', 'Port', 'Path', 'Query', 'Fragment']),
+    uri_parse2(URIString, URI), 
+    stampa(['Scheme', 'Userinfo', 'Host', 'Port', 'Path', 'Query', 'Fragment'], URI).
+%gestione write
+stampa([E1 | Lista], [E2 | URI]) :-
+    write(E1), write(': '), write(E2), nl, 
+    stampa(Lista, URI).
+stampa([], []).
 
 
 %metodo di gestione generale dell'uri 
@@ -48,14 +68,14 @@ gestion(Stringa, Scheme, Userinfo, Host, Port, Path, Query, Fragment) :-
     %metodo gestione scheme
     scheme(Stringa, Scheme, SchemeRest), 
     %metodo gestione parte authorithy 
-    authorithy(SchemeRest, Userinfo, Host, Port, PortRest), 
+    authorithy(SchemeRest, Userinfo, Host, Port, PortRest), !, 
     %metodo gestione di path, query e fragment
     coda(PortRest, Path, Query, Fragment).
     
 %metodi per caso 2 (senza authority)
 gestion(Stringa, Scheme, [], [], [], Path, Query, Fragment) :-
     %metodo per gestione scheme
-    scheme(Stringa, Scheme, SchemeRest), 
+    scheme(Stringa, Scheme, SchemeRest), !,
     %metodo per gestione di path, query e fragment
     coda(SchemeRest, Path, Query, Fragment).    
 
@@ -154,7 +174,7 @@ authorithy([S1, S2 | SchemeRest], [], Host, Port, PortRest) :-
     compress(PortProv, Port).
 %caso senza port ne useinfo
 authorithy([S1, S2 | SchemeRest], [], Host, [], HostRest) :- 
-    S1 == '/', S2 == '/', 
+    S1 == '/', S2 == '/', !,
     hostId(SchemeRest, HostRest, HostProv), 
     compress(HostProv, Host).
 
@@ -168,15 +188,14 @@ coda([C | PortRest], Path, Query, Fragment) :-
 coda([], [], [], []).
 %gestione metodo coda senza authority
 coda(PortRest, Path, Query, Fragment) :-
-    pathSlash(PortRest, PathRest, Path), 
+    pathSlash(PortRest, PathRest, Path), !,
     queryQuestion(PathRest, QueryRest, Query),
     fragmentHastag(QueryRest, [], Fragment).
 coda([], [], [], []).
 
 %metodi usati in coda
 pathSlash(PortRest, PathRest, Path) :-
-    !, 
-    pathId(PortRest, PathRest, PathProv),
+    pathId(PortRest, PathRest, PathProv), !,
     compress(PathProv, Path).
 pathSlash(PortRest, PortRest, []).
 
@@ -251,8 +270,8 @@ pathId(Cs, Cs, []).
 
 %identificazione port
 portId([C, C1|Cs], Cs, [C, C1]) :-
-    C =='8', C1=='0',
-    !.
+    C =='8', C1=='0'.
+    %!.
 
 %identificazione query
 queryId([C|Cs], Cs1, [C|Is]) :-
@@ -263,7 +282,7 @@ queryId(Cs, Cs, []).
 
 %identificazione fragment
 fragmentId([C|Cs], Cs1, [C|Is]) :-
-    !, 
+    %!, 
     fragmentId(Cs, Cs1, Is).
 fragmentId(Cs, Cs, []).
 
