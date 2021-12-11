@@ -149,7 +149,7 @@ authorithy([S1, S2 | SchemeRest], [], Host, [], HostRest) :-
 %gestione metodo coda:
 %con authority 
 coda([C | PortRest], Path, Query, Fragment) :-
-    C == '/',
+    C == '/', !,
     pathSlash(PortRest, PathRest, Path),
     queryQuestion(PathRest, QueryRest, Query),
     fragmentHastag(QueryRest, [], Fragment).
