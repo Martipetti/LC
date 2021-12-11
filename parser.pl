@@ -31,24 +31,31 @@ gestion([C1, C2, C3| SchemeRest], Scheme, Userinfo, [], [], [], [], []) :-
 
 %metodi per fax
 gestion([C1, C2, C3| SchemeRest], Scheme, Userinfo, [], [], [], [], []) :-
-    %controllo sintassi 'fax'
+    %controllo sintassi 'tel'
     fax([C1, C2, C3], Scheme), !,
     %metodo gestione userinfo 
     codaT(SchemeRest, Userinfo).
 
+%metodi per zos
+gestion([C1, C2, C3| SchemeRest], Scheme, Userinfo, Host, Port, PathZ, Query, Fragment) :- % solo una prova non guardare 
+    %controllo sintassi 'zos'
+    zos([C1, C2, C3], Scheme), !,
+    %metodo gestione path
+    codaZ(SchemeRest, Userinfo, Host, Port, PathZ, Query, Fragment).
+
 %metodi per caso 1 (con authority)
 gestion(Stringa, Scheme, Userinfo, Host, Port, Path, Query, Fragment) :-
     %metodo gestione scheme
-    scheme(Stringa, Scheme, SchemeRest), %!,
+    scheme(Stringa, Scheme, SchemeRest), 
     %metodo gestione parte authorithy 
-    authorithy(SchemeRest, Userinfo, Host, Port, PortRest),
+    authorithy(SchemeRest, Userinfo, Host, Port, PortRest), 
     %metodo gestione di path, query e fragment
     coda(PortRest, Path, Query, Fragment).
     
 %metodi per caso 2 (senza authority)
 gestion(Stringa, Scheme, [], [], [], Path, Query, Fragment) :-
     %metodo per gestione scheme
-    scheme(Stringa, Scheme, SchemeRest), %!,
+    scheme(Stringa, Scheme, SchemeRest), 
     %metodo per gestione di path, query e fragment
     coda(SchemeRest, Path, Query, Fragment).    
 
@@ -90,15 +97,20 @@ tel([C1, C2, C3], Scheme) :-
     C1 == 't', C2 == 'e', C3 == 'l',
     compress([C1, C2, C3], Scheme).
 
+%metodo fax
+fax([C1, C2, C3], Scheme) :-
+    C1 == 'f', C2 == 'a', C3 == 'x',
+    compress([C1, C2, C3], Scheme).
+
 %coda scheme tel e fax
 codaT(SchemeRest, Userinfo) :-
     duepunti(SchemeRest, SchemeRestAgg), 
     stringId(SchemeRestAgg, [], UserinfoProv),
     compress(UserinfoProv, Userinfo).
 
-%metodo fax
-fax([C1, C2, C3], Scheme) :-
-    C1 == 'f', C2 == 'a', C3 == 'x',
+%metodo zos
+zos([C1, C2, C3], Scheme) :-
+    C1 == 'z', C2 == 'o', C3 == 's',
     compress([C1, C2, C3], Scheme).
 
 
@@ -112,10 +124,10 @@ scheme(URIString, Scheme, StringAgg) :-
 %gestione authorithy:
 %caso userinfo e port
 authorithy([S1, S2 | SchemeRest], Userinfo, Host, Port, PortRest) :- 
-    S1 == '/', S2 == '/',
+    S1 == '/', S2 == '/', 
     stringId(SchemeRest, [C1 | UserinfoRest], UserinfoProv), 
     compress(UserinfoProv, Userinfo), 
-    C1 == '@',
+    C1 == '@', 
     hostId(UserinfoRest, [C2 | HostRest], HostProv),
     compress(HostProv, Host),
     C2 == ':',
@@ -124,7 +136,7 @@ authorithy([S1, S2 | SchemeRest], Userinfo, Host, Port, PortRest) :-
     compress(PortProv, Port).
 %caso userinfo
 authorithy([S1, S2 | SchemeRest], Userinfo, Host, [], HostRest) :- 
-    S1 == '/', S2 == '/',
+    S1 == '/', S2 == '/', 
     stringId(SchemeRest, [C | UserinfoRest], UserinfoProv),
     compress(UserinfoProv, Userinfo),
     C == '@',
@@ -133,7 +145,7 @@ authorithy([S1, S2 | SchemeRest], Userinfo, Host, [], HostRest) :-
     compress(HostProv, Host).
 %caso port
 authorithy([S1, S2 | SchemeRest], [], Host, Port, PortRest) :- 
-    S1 == '/', S2 == '/',
+    S1 == '/', S2 == '/', 
     stringId(SchemeRest, [C | HostRest], HostProv), 
     compress(HostProv, Host),
     C == ':',
@@ -142,7 +154,7 @@ authorithy([S1, S2 | SchemeRest], [], Host, Port, PortRest) :-
     compress(PortProv, Port).
 %caso senza port ne useinfo
 authorithy([S1, S2 | SchemeRest], [], Host, [], HostRest) :- 
-    S1 == '/', S2 == '/',
+    S1 == '/', S2 == '/', 
     hostId(SchemeRest, HostRest, HostProv), 
     compress(HostProv, Host).
 
@@ -156,7 +168,7 @@ coda([C | PortRest], Path, Query, Fragment) :-
 coda([], [], [], []).
 %gestione metodo coda senza authority
 coda(PortRest, Path, Query, Fragment) :-
-    pathSlash(PortRest, PathRest, Path),
+    pathSlash(PortRest, PathRest, Path), 
     queryQuestion(PathRest, QueryRest, Query),
     fragmentHastag(QueryRest, [], Fragment).
 coda([], [], [], []).
@@ -186,7 +198,8 @@ fragmentHastag(QueryRest, QueryRest, []).
 
 %identificazione stringa dello scheme
 stringId([C|Cs], Cs1, [C|Is]) :- 
-    C\='/', C\='?', C\='#', C\='@', C\=':',!, 
+    C\='/', C\='?', C\='#', C\='@', C\=':',
+    !, 
     stringId(Cs, Cs1, Is).
 stringId(Cs, Cs, []).
 
@@ -237,10 +250,10 @@ pathId([C|Cs], Cs1, [C|Is]) :-
 pathId(Cs, Cs, []).
 
 %identificazione port
-portId([C, C1|Cs], Cs, [C C1]) :-
-    C=='8', C1=='0',
+portId([C, C1|Cs], Cs, [C, C1]) :-
+    C =='8', C1=='0',
     !.
- 
+
 %identificazione query
 queryId([C|Cs], Cs1, [C|Is]) :-
     C\='#', 
