@@ -218,23 +218,12 @@ ip([N1, N2, N3, N4, N5, N6, N7, N8, N9, N10, N11, N12]) :-
     fun(N10, N11, N12).
 %funzione
 fun(C1, C2, C3) :-
-    conv(C1, N1),
-    conv(C2, N2), 
-    conv(C3, N3),
+    atom_number(C1, N1),
+    atom_number(C2, N2),
+    atom_number(C3, N3),
     O = (N1*100 + N2*10 + N3), 
     digit(O).
-%convertire valori
-conv(C, N) :-
-    C = '0', N = 0;
-    C = '1', N = 1;
-    C = '2', N = 2;
-    C = '3', N = 3; 
-    C = '4', N = 4;
-    C = '5', N = 5; 
-    C = '6', N = 6;
-    C = '7', N = 7; 
-    C = '8', N = 8;
-    C = '9', N = 9. 
+
 %numeriIP
 digit(C):-
     C >=0,
