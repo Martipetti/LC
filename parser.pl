@@ -242,7 +242,7 @@ digit(C):-
 
 %identificazione path
 pathId([C|Cs], Cs1, [C|Is]) :-
-    C\='?', C\='#', C\='@', C\=':',
+    C\='?', C\='#', C\='@', C\=':', C\='/',
     !, 
     pathId(Cs, Cs1, Is).
 pathId(Cs, Cs, []).
