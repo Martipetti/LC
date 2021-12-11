@@ -1,5 +1,5 @@
 - contrillare metodi identificatori (se sono tutti)
 - testare bene il primo caso
 - Casi scheme zos
-- Controllare i cut
+- Controllare i cut 
 - andare avanti nel progetto
