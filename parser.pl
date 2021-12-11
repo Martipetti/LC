@@ -26,6 +26,25 @@ stampa([E1 | Lista], [E2 | URI]) :-
     stampa(Lista, URI).
 stampa([], []).
 
+%stampa su stream
+uri_display(URIString, File) :-
+    %lista(['Scheme', 'Userinfo', 'Host', 'Port', 'Path', 'Query', 'Fragment']),
+    uri_parse2(URIString, URI), 
+    stampa2(['Scheme', 'Userinfo', 'Host', 'Port', 'Path', 'Query', 'Fragment'], URI, File).
+%apertura e chiusura stream
+stampa2(Lista, URI, F) :-
+    open(F, write, File),
+    stampa3(Lista, URI, File), 
+    close(File).
+%gestione write
+stampa3([E1 | Lista], [E2 | URI], F) :-
+    write(F, E1), 
+    write(F, ': '), 
+    write(F, E2), 
+    nl(F),
+    stampa3(Lista, URI, F).
+stampa3([], [], _F).
+
 
 %metodo di gestione generale dell'uri 
 %metodi per mailto 
@@ -132,6 +151,10 @@ codaT(SchemeRest, Userinfo) :-
 zos([C1, C2, C3], Scheme) :-
     C1 == 'z', C2 == 'o', C3 == 's',
     compress([C1, C2, C3], Scheme).
+
+%coda scheme zos
+%codaZ(SchemeRest, Userinfo, Host, Port, PathZ, Query, Fragment) :-
+
 
 
 %gestione dello scheme con controllo ':'
