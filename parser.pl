@@ -248,13 +248,10 @@ pathId([C|Cs], Cs1, [C|Is]) :-
 pathId(Cs, Cs, []).
 
 %identificazione port
-portId([C|Cs], Cs1, [C|Is]) :-
-    digit(C),
-    !,
-    portId(Cs, Cs1, Is).
-portId(Cs, Cs, []).
-
-
+portId([C, C1|Cs], Cs, [C C1]) :-
+    C=='8', C1=='0',
+    !.
+ 
 %identificazione query
 queryId([C|Cs], Cs1, [C|Is]) :-
     C\='#', 
