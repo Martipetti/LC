@@ -281,7 +281,7 @@ pathID8([C | Cs], Cs1, [C | Is]):-
 pathID82([C | Cs], Cs1, [C | Is], Cont1):-
     is_alnum(C),
     !,
-    somma(Cont1, 1, R), write(R), nl,
+    somma(Cont1, 1, R), 
     R =< 7,
     pathID82(Cs, Cs1, Is, R).
 pathID82(Cs, Cs, [], _C).
