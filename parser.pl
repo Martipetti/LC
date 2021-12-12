@@ -246,7 +246,7 @@ fragmentHastag([C | QueryRest], FragmentRest, Fragment) :-
     compress(FragmentProv, Fragment).
 fragmentHastag(QueryRest, QueryRest, []).
 
-%PathZos
+%PathZos id44
 pathZos([C, C1| Cs], Cs1, [C1 | Is]):-
     C=='/',
     controllo(C1),
@@ -272,6 +272,19 @@ somma(X, Y, Z):-
 controllo(C):-
     is_alnum(C); C=='.'.
     
+%pathZos id8    controlla se sono caratteri alfanumerici e che siano massimo 8
+pathID8([C | Cs], Cs1, [C | Is]):-
+    is_alnum(C),
+    Cont1=0,
+    pathID82(Cs, Cs1, Is, Cont1).
+
+pathID82([C | Cs], Cs1, [C | Is], Cont1):-
+    is_alnum(C),
+    !,
+    somma(Cont1, 1, R), write(R), nl,
+    R =< 7,
+    pathID82(Cs, Cs1, Is, R).
+pathID82(Cs, Cs, [], _C).
     
 
 %identificazione stringa dello scheme
