@@ -246,6 +246,14 @@ fragmentHastag([C | QueryRest], FragmentRest, Fragment) :-
     compress(FragmentProv, Fragment).
 fragmentHastag(QueryRest, QueryRest, []).
 
+%pathZos con id44 e id8
+pathZos([C, C1| Cs], Cs2, [C1 | Is]):-
+    C=='/',
+    controllo(C1),
+    Cont=0, 
+    pathZos2(Cs, Cs1, Is1, Cont), 
+    pathZos3(Cs1, Cs2, Is2, Cont), 
+    append(Is1, Is2, Is).
 %PathZos id44
 pathZos([C, C1| Cs], Cs1, [C1 | Is]):-
     C=='/',
@@ -255,7 +263,7 @@ pathZos([C, C1| Cs], Cs1, [C1 | Is]):-
 pathZos2([C | Cs], Cs1, [C | Is], Cont):-
      C=='.',
      !,
-     somma(Cont, 1, R), write(R), nl,
+     somma(Cont, 1, R), 
      R =< 43,
      pathZos2(Cs, Cs1, Is, R).
 pathZos2([C | Cs], Cs1, [C | Is], Cont):-
@@ -265,7 +273,23 @@ pathZos2([C | Cs], Cs1, [C | Is], Cont):-
     R =< 43,
     pathZos2(Cs, Cs1, Is, R).
 pathZos2(Cs, Cs, [], _C).
-
+%metodi in pathZos id44 e id8 
+pathZos3([C | Cs], Cs1, Is, Cont):-
+    C == '(',
+    !,
+    pathZos4(Cs, [C2 | Cs1], Is1, Cont),
+    append([C], Is1, IsA),
+    C2 == ')',
+    append(IsA, [C2], Is).
+    
+pathZos4([C | Cs], Cs1, [C | Is], Cont):-
+    is_alnum(C),
+    !,
+    somma(Cont, 1, R), 
+    R =< 8,
+    pathZos2(Cs, Cs1, Is, R).
+pathZos4(Cs, Cs, [], _C).
+%metodo somma usato in pathZos
 somma(X, Y, Z):-
     Z is (X +Y).
 %controllo PathZos
@@ -372,3 +396,4 @@ compress([], []) :- !.
 compress(List, Result) :- 
     string_chars(List1, List), 
     atom_string(Result, List1).
+    
