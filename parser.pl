@@ -286,7 +286,7 @@ pathZos4([C | Cs], Cs1, [C | Is], Cont):-
     is_alnum(C),
     !,
     somma(Cont, 1, R), 
-    R =< 8,
+    R =< 7,
     pathZos2(Cs, Cs1, Is, R).
 pathZos4(Cs, Cs, [], _C).
 %metodo somma usato in pathZos
