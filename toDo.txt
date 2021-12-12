@@ -1,4 +1,4 @@
 - contrillare metodi identificatori (se sono tutti)
 - testare bene il primo caso
-- Casi scheme zos
-- andare avanti nel progetto
+- Schema Zos unire id44 e id8
+
