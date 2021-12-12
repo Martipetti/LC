@@ -255,7 +255,7 @@ pathZos([C, C1| Cs], Cs1, [C1 | Is]):-
 pathZos2([C | Cs], Cs1, [C | Is], Cont):-
      C=='.',
      somma(Cont, 1, R), write(R), nl,
-     R =< 44,
+     R =< 43,
      pathZos2(Cs, Cs1, Is, R).
 pathZos2([C | Cs], Cs1, [C | Is], Cont):-
     is_alnum(C),
