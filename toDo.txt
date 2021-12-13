@@ -1,4 +1,1 @@
-- contrillare metodi identificatori (se sono tutti)
-- testare bene il primo caso
-- Schema Zos unire id44 e id8
 
