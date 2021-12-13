@@ -154,8 +154,8 @@ zos([C1, C2, C3], Scheme) :-
 
 %coda scheme zos
 codaZ(SchemeRest, Userinfo, Host, Port, Path, Query, Fragment) :-
-     duepunti(SchemeRest, SchemeRestAgg),
-     authorithy(SchemeRestAgg, Userinfo, Host, Port, PortRest),
+     duepunti(SchemeRest, SchemeRestAgg), 
+     authorithy(SchemeRestAgg, Userinfo, Host, Port, PortRest), 
      pathSlash2(PortRest, PathRest, Path), 
      coda(PathRest, _P,  Query, Fragment).
 
@@ -230,7 +230,7 @@ pathSlash(PortRest, PortRest, []).
 pathSlash2(PortRest, PathRest, Path) :-
     pathZos(PortRest, PathRest, PathProv), !,
     compress(PathProv, Path).
-pathSlash2(PortRest, PortRest, []).
+
 
 queryQuestion([C | PathRest], QueryRest, Query) :-
     C == '?',
@@ -250,16 +250,12 @@ fragmentHastag(QueryRest, QueryRest, []).
 pathZos([C, C1| Cs], Cs2, [C1 | Is]):-
     C=='/',
     controllo(C1),
-    Cont=0, 
+    !,
+    Cont=0,
     pathZos2(Cs, Cs1, Is1, Cont), 
     pathZos3(Cs1, Cs2, Is2, Cont), 
     append(Is1, Is2, Is).
-%PathZos id44
-pathZos([C, C1| Cs], Cs1, [C1 | Is]):-
-    C=='/',
-    controllo(C1),
-    Cont=0,
-    pathZos2(Cs, Cs1, Is, Cont).
+
 pathZos2([C | Cs], Cs1, [C | Is], Cont):-
      C=='.',
      !,
@@ -274,43 +270,29 @@ pathZos2([C | Cs], Cs1, [C | Is], Cont):-
     pathZos2(Cs, Cs1, Is, R).
 pathZos2(Cs, Cs, [], _C).
 %metodi in pathZos id44 e id8 
-pathZos3([C | Cs], Cs1, Is, Cont):-
+pathZos3([C | Cs], Cs1, Is, Cont1):-
     C == '(',
     !,
-    pathZos4(Cs, [C2 | Cs1], Is1, Cont),
-    append([C], Is1, IsA),
+    Cont1=0,
+    pathZos4(Cs, [C2 | Cs1], Is1, Cont1), 
+    append([C], Is1, IsA), 
     C2 == ')',
     append(IsA, [C2], Is).
-    
-pathZos4([C | Cs], Cs1, [C | Is], Cont):-
-    is_alnum(C),
+pathZos3(Cs, Cs, [], _C).
+pathZos4([C | Cs], Cs1, [C | Is], Cont1):-
+    is_alnum(C), 
     !,
-    somma(Cont, 1, R), 
-    R =< 7,
-    pathZos2(Cs, Cs1, Is, R).
+    somma(Cont1, 1, R), 
+    R =< 7,  
+    pathZos4(Cs, Cs1, Is, R). 
 pathZos4(Cs, Cs, [], _C).
 %metodo somma usato in pathZos
 somma(X, Y, Z):-
-    Z is (X +Y).
+    Z is (X + Y).
 %controllo PathZos
 controllo(C):-
     is_alnum(C); C=='.'.
     
-%pathZos id8    controlla se sono caratteri alfanumerici e che siano massimo 8
-pathID8([C | Cs], Cs1, [C | Is]):-
-    is_alnum(C),
-    Cont1=0,
-    pathID82(Cs, Cs1, Is, Cont1).
-
-pathID82([C | Cs], Cs1, [C | Is], Cont1):-
-    is_alnum(C),
-    !,
-    somma(Cont1, 1, R), 
-    R =< 7,
-    pathID82(Cs, Cs1, Is, R).
-pathID82(Cs, Cs, [], _C).
-    
-
 %identificazione stringa dello scheme
 stringId([C|Cs], Cs1, [C|Is]) :- 
     C\='/', C\='?', C\='#', C\='@', C\=':',
