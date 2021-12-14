@@ -279,8 +279,9 @@ pathZos3([C | Cs], Cs1, Is, Cont1):-
     C2 == ')',
     append(IsA, [C2], Is).
 pathZos3(Cs, Cs, [], _C).
-pathZos4([C | Cs], Cs1, [C | Is], Cont1):-
-    is_alnum(C), 
+pathZos4([C, C1 | Cs], Cs1, [C, C1 | Is], Cont1):-
+    is_alpha(C),
+    is_alnum(C1), 
     !,
     somma(Cont1, 1, R), 
     R =< 7,  
