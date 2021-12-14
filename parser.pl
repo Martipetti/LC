@@ -249,7 +249,7 @@ fragmentHastag(QueryRest, QueryRest, []).
 %pathZos con id44 e id8
 pathZos([C, C1| Cs], Cs2, [C1 | Is]):-
     C=='/',
-    controllo(C1),
+    is_alnum(C1),
     !,
     Cont=0,
     pathZos2(Cs, Cs1, Is1, Cont), 
@@ -289,9 +289,6 @@ pathZos4(Cs, Cs, [], _C).
 %metodo somma usato in pathZos
 somma(X, Y, Z):-
     Z is (X + Y).
-%controllo PathZos
-controllo(C):-
-    is_alnum(C); C=='.'.
     
 %identificazione stringa dello scheme
 stringId([C|Cs], Cs1, [C|Is]) :- 
