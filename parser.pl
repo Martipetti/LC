@@ -249,7 +249,7 @@ fragmentHastag(QueryRest, QueryRest, []).
 %pathZos con id44 e id8
 pathZos([C, C1| Cs], Cs2, [C1 | Is]):-
     C=='/',
-    is_alnum(C1),
+    is_alpha(C1),
     !,
     Cont=0,
     pathZos2(Cs, Cs1, Is1, Cont), 
