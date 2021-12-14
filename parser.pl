@@ -253,6 +253,7 @@ pathZos([C, C1| Cs], Cs2, [C1 | Is]):-
     !,
     Cont=0,
     pathZos2(Cs, Cs1, Is1, Cont), 
+    not(last(Is1, '.')),
     pathZos3(Cs1, Cs2, Is2, Cont), 
     append(Is1, Is2, Is).
 
