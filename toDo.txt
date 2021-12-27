@@ -3,5 +3,5 @@ problema metodo list-id
 gestione lista dei componenti uri
 gestione defstruct
 daniela è brutta
-Martino non c'e l'ha piccolo
+Martino non c'e l'ha piccolo e non mi soddisfa meglio salvatore
 daniela puzza di salvatore che è un uomo di 50 anni e non si lava
