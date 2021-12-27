@@ -1,1 +1,5 @@
-cacchina 
+review code prolog
+problema metodo list-id
+gestione lista dei componenti uri
+gestione defstruct
+daniela è brutta
