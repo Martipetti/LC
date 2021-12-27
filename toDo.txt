@@ -4,4 +4,4 @@ gestione lista dei componenti uri
 gestione defstruct
 daniela è brutta
 Martino non c'e l'ha piccolo
-daniela puzza
+daniela puzza di salvatore
