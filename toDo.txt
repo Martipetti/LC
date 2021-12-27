@@ -3,3 +3,4 @@ problema metodo list-id
 gestione lista dei componenti uri
 gestione defstruct
 daniela è brutta
+Martino c'e l'ha piccolo
