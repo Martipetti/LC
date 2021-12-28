@@ -1,15 +1,18 @@
+(defstruct uri scheme userinfo host port path query fragment)
+
 (defun uri-parse (stringa)
   (let ((lista (coerce stringa 'list)))
   (if (null stringa) (error "stringa vuota")
-    (set-scheme lista))))
+    (and (set-scheme lista)
+    (make-uri :scheme scheme-def)))))
         
 (defun set-scheme (lista)
   (let ((scheme (list-id lista #\:))
         (rest (id-list lista #\:)))
     (if (not (string-id scheme)) (error "URI non valida")
-      (coerce scheme 'string))))
+      (setq scheme-def (coerce scheme 'string)))))
 
-;ritorna la lista da un id in po
+;ritorna la lista da un id in poi
 (defun id-list (lista id)
  (if (null lista) nil
    (if (equal (car lista) id) (cdr lista)
