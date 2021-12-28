@@ -39,3 +39,7 @@
          (eq (car scheme) #\:)) nil 
          (cdr scheme)
          ))     
+(defun query-id (query)
+  (if (eq (car scheme) #\#) nil 
+         (cdr scheme)
+         ))    
