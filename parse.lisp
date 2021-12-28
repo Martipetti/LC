@@ -6,7 +6,7 @@
 (defun set-scheme (lista)
   (let ((scheme (list-id lista #\:))
         (rest (id-list lista #\:)))
-    (if (null scheme) (error "URI non valida")
+    (if (not (string-id scheme)) (error "URI non valida")
       (coerce scheme 'string))))
 
 ;ritorna la lista da un id in po
@@ -26,3 +26,16 @@
 (defun rev (l) 
   (cond ((null l) '())
         (t (append (rev (cdr l)) (list (car l)))))) 
+
+;controllo dello scheme
+(defun string-id (scheme)
+   (and (not (null scheme)) (identificatore-id scheme))
+)
+(defun identificatore-id (scheme)
+  (if (or(eq (car scheme) #\/)
+         (eq (car scheme) #\?)
+         (eq (car scheme) #\#)
+         (eq (car scheme) #\@)
+         (eq (car scheme) #\:)) nil 
+         (cdr scheme)
+         ))     
