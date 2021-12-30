@@ -5,86 +5,65 @@
   (if (null stringa) (error "stringa vuota")
     (and (set-scheme lista)
     (make-uri :scheme scheme-def
-              :host host-1
-              :path path-1     ;campi aggiuntivi uri
-              :query query-1
-              :fragment fragment-1)))))
+              :userinfo userinfo-def
+              :host host-def)))))
+
 ;metodo di gestione dello scheme (controllare)       
 (defun set-scheme (lista)
-  (let ((scheme (list-id lista #\:))
-        (rest (id-list lista #\:)))
-    (if (not (string-id scheme)) (error "URI non valida")
-      (and (setq scheme-def (coerce scheme 'string))
-        (if(and (eq (car rest) #\/)
-                (eq (car (cdr rest)) #\/))
-                (authority rest)
-                (coda rest)       
-                       )))))
+  (if (null (check-scheme lista)) (error "URI non valida"))
+      (let ((scheme (list-id lista #\:))
+            (rest (id-list lista #\:)))
+          (and (setq scheme-def (coerce scheme 'string))
+               (autorithy rest))))
+
+(defun check-scheme (lista)
+  (member #\: lista))
+
+;metodo di gestione authority 
+(defun autorithy (lista)
+  (let ((id1 (car lista))          ;prendo primo slash
+        (id2 (car (cdr lista)))    ;prendo secondo slash
+        (rest (cdr (cdr lista))))  ;resto
+      (if (and (equal id1 #\/) (equal id2 #\/)) 
+        (and (write "caso user-info") (set-userinfo rest) )
+        (and (write rest) (setq userinfo-def '()) (setq host-def '()) (set-rest lista)))))
+
+;metodo per gestione di path, query, id e fragment
+(defun set-userinfo (lista)
+  (if (null (member #\@ lista)) (set-host lista)
+    (and (setq userinfo-def (coerce (list-id lista #\@) 'string)) 
+         (set-host (id-list lista #\@)))))
+
+;gestione host
+(defun set-host (lista)
+(and (write lista)
+   (if (null lista) (error "URI non valida")
+    (if (not (null (member #\: lista)))
+        (setq host-def (coerce (list-id #\:) 'string)
+      (if (not (null (member #\/ lista)))
+        (setq host-def (coerce (list-id #\/) 'string))
+        (setq host-def (coerce lista 'string))))))))
+
+;gestione 
+(defun set-rest (lista)
+  (setq prova (coerce lista 'string)))
 
 ;ritorna la lista da un id in poi
 (defun id-list (lista id)
  (if (null lista) nil
-   (if (equal (car lista) id) (cdr lista)
-     (id-list (cdr lista) id))))
+    (if (equal (car lista) id) (cdr lista)
+      (id-list (cdr lista) id))))
+
 ;ritorna la lista dall'inizio fino ad un certo id
 (defun list-id (lista id)
-  (if (null lista) '()
-    (list-to-id (rev lista) id)))
-(defun list-to-id (lista id)
-  (if (null lista) nil
-    (if (equal (car lista) id) (rev (cdr lista))
-      (list-to-id (cdr lista) id))))
-;funzione di reverse
-(defun rev (l) 
-  (cond ((null l) '())
-        (t (append (rev (cdr l)) (list (car l)))))) 
+ ; (if (not (listp lista)) 
+     ; (if (equal lista id) '()
+      ;  (error "URI non valida"))
+    (if (eq (car lista) id) '()
+      (cons (car lista) (list-id (cdr lista) id))))
 
 ;controllo dello scheme
 (defun string-id (scheme)
-   (and (not (null scheme)) (identificatore-id scheme))
-)
-(defun identificatore-id (scheme)
-  (if (or(eq (car scheme) #\/)
-         (eq (car scheme) #\?)
-         (eq (car scheme) #\#)
-         (eq (car scheme) #\@)
-         (eq (car scheme) #\:)) nil 
-         (cdr scheme)
-         ))    
-;controllo query         
-(defun query-id (query)
-  (if (eq (car scheme) #\#) nil 
-         (cdr scheme)
-         ))    
-;authority (solo prova)
-(defun authority (aut)
-(if (null aut) (error "aut non valida")
-      (setq host-1 (coerce aut 'string))))
+   (and (not (null scheme)) (identificatore-id scheme)))
 
-;metodo per gestire la query (probabilmente da rivedere)
-(defun query (q)
-(if (eq (car q) #\?) 
-      (let ((query1 (list-id lista #\?))
-            (r (id-list lista #\?)))
-           (if (not (query-id path)) (error "URI non valida")
-           (and (setq query-1 (coerce query1 'string))
-             (if (eq (car r) #\#)
-                (fragment r)    
-                       ))))))
-;metodo per gestire il fragment (forse da rivedere)
-(defun fragment (f)
-(if (eq (car f) #\#) 
-      (let ((fragment1 (list-id lista #\#))
-       (setq fragment-1 (coerce fragment1 'string))))))
-                                    
-;metodo per gestire path,query e fragment semplificato 
-(defun coda (rest)
-(if (eq (car rest) #\/)   ;al posto di if si potrebbe usare anche when 
-      (let ((path (list-id lista #\/))
-            (r (id-list lista #\/)))
-           (if (not (identificatore-id path)) (error "URI non valida")
-           (and (setq path-1 (coerce path 'string))
-             (if (eq (car r) #\?)
-                (query r)    
-                       ))))))
       
