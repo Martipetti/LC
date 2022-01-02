@@ -16,22 +16,25 @@
             (rest (id-list lista #\:)))
           (and (setq scheme-def (coerce scheme 'string))
                (autorithy rest)))))
+;da inserire metodi con sintassi speciali
 
 ;metodo di gestione authority 
 (defun autorithy (lista)
-  (let ((id1 (car lista))          ;prendo primo slash
-        (id2 (car (cdr lista)))    ;prendo secondo slash
-        (rest (cdr (cdr lista))))  ;resto
+  (let ((id1 (car lista))
+        (id2 (car (cdr lista)))
+        (rest (cdr (cdr lista))))
       (if (and (equal id1 #\/) (equal id2 #\/)) 
-        (set-userinfo rest) 
+        (set-userinfo rest)
         (and (defvar userinfo-def nil) 
-             (defvar host-def '()) 
+             (defvar host-def nil) 
              (set-rest lista)))))
 
 ;metodo per gestione di path, query, id e fragment
 (defun set-userinfo (lista)
- (if (null (identificatore-id (list-id lista #\@))) (error "userinfo non valida")
-  (if (null (check #\@ lista)) (and (defvar userinfo-def nil) (set-host lista))
+ (if (null (identificatore-id (list-id lista #\@))) 
+     (error "userinfo non valida")
+  (if (null (check #\@ lista)) 
+      (and (defvar userinfo-def nil) (set-host lista))
     (and (setq userinfo-def (coerce (list-id lista #\@) 'string)) 
          (set-host (id-list lista #\@))))))
 
