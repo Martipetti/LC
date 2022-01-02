@@ -84,7 +84,7 @@
          (eq (car lista) #\@)
          (eq (car lista) #\.)
          (eq (car lista) #\:)) nil)
-         (T (identificatore-host (cdr lista)))))        
+         (T (identificatore-id (cdr lista)))))        
 ;controllo query         
 (defun query-id (query)
   (if (eq (car query) #\#) nil 
