@@ -14,7 +14,7 @@
       (let ((scheme (list-id lista #\:))
             (rest (id-list lista #\:)))
           (and (setq scheme-def (coerce scheme 'string))
-               (autorithy rest))))
+               (autorithy rest)))))
 
 ;metodo di gestione authority 
 (defun autorithy (lista)
