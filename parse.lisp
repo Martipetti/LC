@@ -25,8 +25,10 @@
         (id2 (car (cdr lista)))    ;prendo secondo slash
         (rest (cdr (cdr lista))))  ;resto
       (if (and (equal id1 #\/) (equal id2 #\/)) 
-        (and (write "caso user-info") (set-userinfo rest) )
-        (and (write rest) (setq userinfo-def '()) (setq host-def '()) (set-rest lista)))))
+        (set-userinfo rest) 
+        (and (defvar userinfo-def nil) 
+             (defvar host-def '()) 
+             (set-rest lista)))))
 
 ;metodo per gestione di path, query, id e fragment
 (defun set-userinfo (lista)
@@ -36,13 +38,12 @@
 
 ;gestione host
 (defun set-host (lista)
-(and (write lista)
    (if (null lista) (error "URI non valida")
-    (if (not (null (member #\: lista)))
-        (setq host-def (coerce (list-id #\:) 'string)
-      (if (not (null (member #\/ lista)))
-        (setq host-def (coerce (list-id #\/) 'string))
-        (setq host-def (coerce lista 'string))))))))
+    (if (check #\: lista)
+        (defvar host-def (coerce (list-id #\:) 'string)
+      (if (check #\/ lista)))
+        (defvar host-def (coerce (list-id #\/) 'string))
+        (defvar host-def (coerce lista 'string)))))
 
 ;gestione 
 (defun set-rest (lista)
@@ -66,4 +67,6 @@
 (defun string-id (scheme)
    (and (not (null scheme)) (identificatore-id scheme)))
 
-      
+;metodo di controllo del member
+(defun check (id lista)
+  (member id lista))
