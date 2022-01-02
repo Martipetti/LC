@@ -25,8 +25,8 @@
         (rest (cdr (cdr lista))))
       (if (and (equal id1 #\/) (equal id2 #\/)) 
         (set-userinfo rest)
-        (and (defvar userinfo-def nil) 
-             (defvar host-def nil) 
+        (and (defparameter userinfo-def nil) 
+             (defparameter host-def nil) 
              (set-rest lista)))))
 
 ;metodo per gestione di path, query, id e fragment
