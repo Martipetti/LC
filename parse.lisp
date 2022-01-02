@@ -29,14 +29,14 @@
 
 ;metodo per gestione di path, query, id e fragment
 (defun set-userinfo (lista)
- (if (null (identificatore-id lista)) (error "URI non valida")
+ (if (null (identificatore-id lista)) (error "userinfo non valida")
   (if (null (check #\@ lista)) (and (defvar userinfo-def nil) (set-host lista))
     (and (setq userinfo-def (coerce (list-id lista #\@) 'string)) 
          (set-host (id-list lista #\@))))))
 
 ;gestione host
 (defun set-host (lista)
-   (if (null lista) (error "URI non valida")
+   (if (or (null lista) (null (identificatore-host lista))) (error "host non valida")
     (if (check #\: lista)
         (setq host-def (coerce (list-id #\:) 'string))
       (if (check #\/ lista)
@@ -68,17 +68,24 @@
 ;metodo di controllo del member
 (defun check (id lista)
   (member id lista))
-   
+;controllo identificatore  
 (defun identificatore-id (scheme)
   (if (or(eq (car scheme) #\/)
          (eq (car scheme) #\?)
          (eq (car scheme) #\#)
          (eq (car scheme) #\@)
          (eq (car scheme) #\:)) nil 
-         (cdr scheme)
-         ))    
+         (identificatore-id (cdr scheme))))    
+;controllo identificatore host
+(defun identificatore-host (host)
+  (if (or(eq (car host) #\/)
+         (eq (car host) #\?)
+         (eq (car host) #\#)
+         (eq (car host) #\@)
+         (eq (car host) #\.)
+         (eq (car host) #\:)) nil 
+         (identificatore-id (cdr host))))          
 ;controllo query         
 (defun query-id (query)
-  (if (eq (car scheme) #\#) nil 
-         (cdr scheme)
-         ))    
+  (if (eq (car query) #\#) nil 
+         (query-id (cdr query))))    
