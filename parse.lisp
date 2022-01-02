@@ -10,7 +10,7 @@
 
 ;metodo di gestione dello scheme (controllare)       
 (defun set-scheme (lista)
-  (if (or (null (check #\: lista)) (null (identificatore-id lista))) (error "URI non valida")
+  (if (null (check #\: lista)) (error "URI non valida")
       (let ((scheme (list-id lista #\:))
             (rest (id-list lista #\:)))
           (and (setq scheme-def (coerce scheme 'string))
@@ -29,7 +29,7 @@
 
 ;metodo per gestione di path, query, id e fragment
 (defun set-userinfo (lista)
- (if (null (identificatore-id lista)) (error "userinfo non valida")
+ (if (null (identificatore-id (list-id lista #\@))) (error "userinfo non valida")
   (if (null (check #\@ lista)) (and (defvar userinfo-def nil) (set-host lista))
     (and (setq userinfo-def (coerce (list-id lista #\@) 'string)) 
          (set-host (id-list lista #\@))))))
@@ -61,31 +61,31 @@
     (if (eq (car lista) id) '()
       (cons (car lista) (list-id (cdr lista) id))))
 
-;controllo dello scheme
-(defun string-id (scheme)
-   (and (not (null scheme)) (identificatore-id scheme)))
 
 ;metodo di controllo del member
 (defun check (id lista)
   (member id lista))
 ;controllo identificatore  
-(defun identificatore-id (scheme)
-  (cond ((null scheme) T)
-        ((or(eq (car scheme) #\/)
-         (eq (car scheme) #\?)
-         (eq (car scheme) #\#)
-         (eq (car scheme) #\@)
-         ;(eq (car scheme) #\:)
+(defun identificatore-id (lista)
+  (cond ((null lista) T)
+        ((or(eq (car lista) #\/)
+         (eq (car lista) #\?)
+         (eq (car lista) #\#)
+         (eq (car lista) #\@)
+         (eq (car lista) #\:)
          ) nil)
-         (T (identificatore-id (cdr scheme)))))   
+         (T (identificatore-id (cdr lista)))))   
 ;controllo identificatore host
-(defun identificatore-host (host)
-  (cond ((null host) T)
-        ((or(eq (car host) #\/)
-         (eq (car host) #\?)
-         (eq (car host) #\#)
-         (eq (car host) #\@)
-         (eq (car host) #\.)
-         (eq (car host) #\:)) nil)
-         (T (identificatore-host (cdr host)))))        
+(defun identificatore-host (lista)
+  (cond ((null lista) T)
+        ((or(eq (car lista) #\/)
+         (eq (car lista) #\?)
+         (eq (car lista) #\#)
+         (eq (car lista) #\@)
+         (eq (car lista) #\.)
+         (eq (car lista) #\:)) nil)
+         (T (identificatore-host (cdr lista)))))        
 ;controllo query         
+(defun query-id (query)
+  (if (eq (car query) #\#) nil 
+         (query-id (cdr query))))       
