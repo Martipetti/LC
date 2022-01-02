@@ -10,7 +10,7 @@
 
 ;metodo di gestione dello scheme (controllare)       
 (defun set-scheme (lista)
-  (if (or (null (check #\: lista)) (null (string-id lista))) (error "URI non valida")
+  (if (or (null (check #\: lista)) (null (identificatore-id lista))) (error "URI non valida")
       (let ((scheme (list-id lista #\:))
             (rest (id-list lista #\:)))
           (and (setq scheme-def (coerce scheme 'string))
@@ -70,22 +70,22 @@
   (member id lista))
 ;controllo identificatore  
 (defun identificatore-id (scheme)
-  (if (or(eq (car scheme) #\/)
+  (cond ((null scheme) T)
+        ((or(eq (car scheme) #\/)
          (eq (car scheme) #\?)
          (eq (car scheme) #\#)
          (eq (car scheme) #\@)
-         (eq (car scheme) #\:)) nil 
-         (identificatore-id (cdr scheme))))    
+         ;(eq (car scheme) #\:)
+         ) nil)
+         (T (identificatore-id (cdr scheme)))))   
 ;controllo identificatore host
 (defun identificatore-host (host)
-  (if (or(eq (car host) #\/)
+  (cond ((null host) T)
+        ((or(eq (car host) #\/)
          (eq (car host) #\?)
          (eq (car host) #\#)
          (eq (car host) #\@)
          (eq (car host) #\.)
-         (eq (car host) #\:)) nil 
-         (identificatore-id (cdr host))))          
+         (eq (car host) #\:)) nil)
+         (T (identificatore-host (cdr host)))))        
 ;controllo query         
-(defun query-id (query)
-  (if (eq (car query) #\#) nil 
-         (query-id (cdr query))))    
