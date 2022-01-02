@@ -7,7 +7,8 @@
     (make-uri :scheme scheme-def
               :userinfo userinfo-def
               :host host-def
-              :port port-def)))))
+              :port port-def
+              :path path-def)))))
 
 ;metodo di gestione dello scheme (controllare)       
 (defun set-scheme (lista)
@@ -29,7 +30,7 @@
              (defparameter host-def nil) 
              (set-rest lista)))))
 
-;metodo per gestione di path, query, id e fragment
+;gestione userinfo 
 (defun set-userinfo (lista)
  (if (null (identificatore-id (list-id lista #\@))) 
      (error "userinfo non valida")
@@ -53,26 +54,48 @@
                    (setq port-def "80")))
             (and (setq host-def (coerce lista 'string))
                  (setq port-def "80")
-                 (defvar path-def nil)
-                 (defvar query-def nil)
-                 (defvar fragment-def nil))))))
+                 (defparameter path-def nil)
+                 (defparameter query-def nil)
+                 (defparameter fragment-def nil))))))
 
 ;gestione port
 (defun set-port (lista)
-  (if (or (null (identificatore-id (list-id lista #\/))) 
-          (null (identificatore-id lista)))
+  (if (if (check #\/ lista) 
+          (null (identificatore-port (list-id lista #\/)))
+          (null (identificatore-port lista)))
       (error "port non valida")
     (if (check #\/ lista)
-        (setq port-def (coerce (list-id #\/) 'string)) 
-      ;aggiungere chiamata a metodo di path
+        (and (setq port-def (coerce (list-id lista #\/) 'string))
+             (set-port (id-list lista #\/)))
       (and (setq port-def (coerce lista 'string))
-           (defvar path-def nil)
-           (defvar query-def nil)
-           (defvar fragment-def nil)))))
+           (defparameter path-def nil)
+           (defparameter query-def nil)
+           (defparameter fragment-def nil)))))
 
-;gestione
+;gestione 
 (defun set-rest (lista)
-  (setq prova (coerce lista 'string)))
+  (let ((id (car lista))
+        (rest (cdr lista)))
+    (if (and (equal id #\/) (not (null rest)))
+        (set-path rest)
+      (and (defparameter path-def nul)
+           (defparameter query-def nul)
+           (defparameter fragment-def nul)))))
+
+;gestione path
+(defun set-path (lista)
+  (if (or (null lista) 
+          (null (list-id lista #\?))
+          (null (list-id lista #\#)))
+       (and (defparameter path-def nil)
+         (set-query lista))
+    (if (check #\? lista)
+        (if (identificatore-id (list-id lista #\?))
+            (setq path-def (coerce (list-id lista #\?) 'string))
+          (error "path non valida"))
+      (if (identificatore-id lista)
+          (setq path-def (coerce lista 'string))
+        (error "path non valida")))))
 
 ;ritorna la lista da un id in poi
 (defun id-list (lista id)
@@ -86,7 +109,7 @@
     (if (eq (car lista) id) '()
       (cons (car lista) (list-id (cdr lista) id)))))
 
-;metodo di controllo del member
+;metodo di controllo presenza id
 (defun check (id lista)
   (if (null (member id lista)) 
       nil
@@ -111,7 +134,13 @@
          (eq (car lista) #\@)
          (eq (car lista) #\.)
          (eq (car lista) #\:)) nil)
-         (T (identificatore-id (cdr lista)))))     
+         (T (identificatore-id (cdr lista)))))  
+
+;controllo identificatore port
+(defun identificatore-port (lista)
+  (cond ((null lista) T)
+        ((null (digit-char-p (car lista))) nil)
+        (t (identificatore-port (cdr lista)))))
    
 ;controllo query         
 (defun query-id (query)
