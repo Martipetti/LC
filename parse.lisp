@@ -55,16 +55,13 @@
 
 ;ritorna la lista dall'inizio fino ad un certo id
 (defun list-id (lista id)
- ; (if (not (listp lista)) 
-     ; (if (equal lista id) '()
-      ;  (error "URI non valida"))
     (if (eq (car lista) id) '()
       (cons (car lista) (list-id (cdr lista) id))))
-
 
 ;metodo di controllo del member
 (defun check (id lista)
   (member id lista))
+
 ;controllo identificatore  
 (defun identificatore-id (lista)
   (cond ((null lista) T)
@@ -72,9 +69,9 @@
          (eq (car lista) #\?)
          (eq (car lista) #\#)
          (eq (car lista) #\@)
-         (eq (car lista) #\:)
-         ) nil)
-         (T (identificatore-id (cdr lista)))))   
+         (eq (car lista) #\:)) nil)
+         (T (identificatore-id (cdr lista)))))
+   
 ;controllo identificatore host
 (defun identificatore-host (lista)
   (cond ((null lista) T)
@@ -84,7 +81,8 @@
          (eq (car lista) #\@)
          (eq (car lista) #\.)
          (eq (car lista) #\:)) nil)
-         (T (identificatore-id (cdr lista)))))        
+         (T (identificatore-id (cdr lista)))))     
+   
 ;controllo query         
 (defun query-id (query)
   (if (eq (car query) #\#) nil 
