@@ -10,7 +10,7 @@
 
 ;metodo di gestione dello scheme (controllare)       
 (defun set-scheme (lista)
-  (if (or (null (check #\: lista)) (null (string-id lista))) (error "URI non valida"))
+  (if (or (null (check #\: lista)) (null (string-id lista))) (error "URI non valida")
       (let ((scheme (list-id lista #\:))
             (rest (id-list lista #\:)))
           (and (setq scheme-def (coerce scheme 'string))
