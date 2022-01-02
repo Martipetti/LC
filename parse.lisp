@@ -10,14 +10,11 @@
 
 ;metodo di gestione dello scheme (controllare)       
 (defun set-scheme (lista)
-  (if (null (check-scheme lista)) (error "URI non valida"))
+  (if (or (null (check #\: lista)) (null (string-id lista))) (error "URI non valida"))
       (let ((scheme (list-id lista #\:))
             (rest (id-list lista #\:)))
           (and (setq scheme-def (coerce scheme 'string))
                (autorithy rest))))
-
-(defun check-scheme (lista)
-  (member #\: lista))
 
 ;metodo di gestione authority 
 (defun autorithy (lista)
@@ -32,18 +29,19 @@
 
 ;metodo per gestione di path, query, id e fragment
 (defun set-userinfo (lista)
-  (if (null (member #\@ lista)) (set-host lista)
+ (if (null (identificatore-id lista)) (error "URI non valida")
+  (if (null (check #\@ lista)) (and (defvar userinfo-def nil) (set-host lista))
     (and (setq userinfo-def (coerce (list-id lista #\@) 'string)) 
-         (set-host (id-list lista #\@)))))
+         (set-host (id-list lista #\@))))))
 
 ;gestione host
 (defun set-host (lista)
    (if (null lista) (error "URI non valida")
     (if (check #\: lista)
-        (defvar host-def (coerce (list-id #\:) 'string)
-      (if (check #\/ lista)))
-        (defvar host-def (coerce (list-id #\/) 'string))
-        (defvar host-def (coerce lista 'string)))))
+        (setq host-def (coerce (list-id #\:) 'string))
+      (if (check #\/ lista)
+        (setq host-def (coerce (list-id #\/) 'string))
+        (setq host-def (coerce lista 'string))))))
 
 ;gestione 
 (defun set-rest (lista)
@@ -70,3 +68,17 @@
 ;metodo di controllo del member
 (defun check (id lista)
   (member id lista))
+   
+(defun identificatore-id (scheme)
+  (if (or(eq (car scheme) #\/)
+         (eq (car scheme) #\?)
+         (eq (car scheme) #\#)
+         (eq (car scheme) #\@)
+         (eq (car scheme) #\:)) nil 
+         (cdr scheme)
+         ))    
+;controllo query         
+(defun query-id (query)
+  (if (eq (car scheme) #\#) nil 
+         (cdr scheme)
+         ))    
