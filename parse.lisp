@@ -138,7 +138,8 @@
         ((null (digit-char-p (car lista))) nil)
         (t (identificatore-port (cdr lista))))) 
 ;controllo query         
-(defun query-id (query)
-  (if (eq (car query) #\#) nil 
-         (query-id (cdr query))))  
+(defun query-id (lista)
+  (cond ((null lista) T)
+        ((eq (car lista) #\#) nil)
+        (t (query-id (cdr lista)))))  
 
