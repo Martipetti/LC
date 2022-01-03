@@ -192,7 +192,7 @@ authorithy([S1, S2 | SchemeRest], Userinfo, Host, '80', HostRest) :-
 %caso port
 authorithy([S1, S2 | SchemeRest], [], Host, Port, PortRest) :- 
     S1 == '/', S2 == '/', 
-    stringId(SchemeRest, [C | HostRest], HostProv), 
+    hostId(SchemeRest, [C | HostRest], HostProv), 
     compress(HostProv, Host),
     C == ':',
     !,
