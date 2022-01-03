@@ -1,5 +1,5 @@
 review code prolog
 sintassi speciali LISP
 IP LISP
-Controllare caso "http:?query" e "http:#fragment" sia LISP che Prolog (dovrebbe dare errore ma stampa lo stesso)
+Controllare caso "http:?query" e "http:#fragment" in Prolog (dovrebbe dare errore ma stampa lo stesso)
 
