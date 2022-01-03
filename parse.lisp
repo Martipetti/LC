@@ -57,13 +57,13 @@
                  (defparameter fragment-def nil))))))
 
 ;gestione port
-(defun set-port (lista)
-  (if (if (check #\/ lista) (null (identificatore-port (list-id lista #\/))) ;bho
-          (null (identificatore-port lista))) (error "port non valida")
-      (if (check #\/ lista)
+(defun set-port (lista)     
+  (if (check #\/ lista) 
+    (if (null (identificatore-port (list-id lista #\/))) (error "port non valida")
         (and (setq port-def (coerce (list-id lista #\/) 'string))
-             (set-rest (id-list lista #\/)))
-      (and (setq port-def (coerce lista 'string))
+             (set-rest (id-list lista #\/))))
+      (if (null (identificatore-port lista)) (error "port non valida")
+        (and (setq port-def (coerce lista 'string))
            (defparameter path-def nil)
            (defparameter query-def nil)
            (defparameter fragment-def nil)))))
@@ -141,3 +141,4 @@
 (defun query-id (query)
   (if (eq (car query) #\#) nil 
          (query-id (cdr query))))  
+
