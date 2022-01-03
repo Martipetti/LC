@@ -7,16 +7,16 @@
     (make-uri :scheme scheme-def
               :userinfo userinfo-def
               :host host-def
-              :port port-def
-              :path path-def)))))
+              :port port-def)))))
 
 ;metodo di gestione dello scheme (controllare)       
 (defun set-scheme (lista)
   (if (null (check #\: lista)) (error "URI non valida")
+   (if (null (identificatore-id (list-id lista #\:))) (error "scheme non valido")
       (let ((scheme (list-id lista #\:))
             (rest (id-list lista #\:)))
           (and (setq scheme-def (coerce scheme 'string))
-               (autorithy rest)))))
+               (autorithy rest))))))
 ;da inserire metodi con sintassi speciali
 
 ;metodo di gestione authority 
@@ -30,25 +30,23 @@
              (defparameter host-def nil) 
              (set-rest lista)))))
 
-;gestione userinfo 
+;metodo per gestione di path, query, id e fragment
 (defun set-userinfo (lista)
- (if (null (identificatore-id (list-id lista #\@))) 
-     (error "userinfo non valida")
-  (if (null (check #\@ lista)) 
-      (and (defvar userinfo-def nil) (set-host lista))
-    (and (setq userinfo-def (coerce (list-id lista #\@) 'string)) 
+(if (null (check #\@ lista)) (and (defparameter userinfo-def nil) (set-host lista))
+ (if (null (identificatore-id (list-id lista #\@))) (error "userinfo non valida")
+   (and (setq userinfo-def (coerce (list-id lista #\@) 'string)) 
          (set-host (id-list lista #\@))))))
 
 ;gestione host
 (defun set-host (lista)
    (if (null lista) (error "host non valida")
     (if (check #\: lista)
-        (if (null (identificatore-id (list-id lista #\:))) 
+        (if (null (identificatore-host (list-id lista #\:))) 
             (error "host non valida")
           (and (setq host-def (coerce (list-id lista #\:) 'string))
              (set-port (id-list lista #\:))))
           (if (check #\/ lista)
-              (if (null (identificatore-id (list-id lista #\/))) 
+              (if (null (identificatore-host (list-id lista #\/))) 
                   (error "host non valida")
                 (and (setq host-def (coerce (list-id lista #\/) 'string))
                    (setq port-def "80")))
@@ -60,13 +58,11 @@
 
 ;gestione port
 (defun set-port (lista)
-  (if (if (check #\/ lista) 
-          (null (identificatore-port (list-id lista #\/)))
-          (null (identificatore-port lista)))
-      (error "port non valida")
-    (if (check #\/ lista)
+  (if (if (check #\/ lista) (null (identificatore-port (list-id lista #\/))) ;bho
+          (null (identificatore-port lista))) (error "port non valida")
+      (if (check #\/ lista)
         (and (setq port-def (coerce (list-id lista #\/) 'string))
-             (set-port (id-list lista #\/)))
+             (set-rest (id-list lista #\/)))
       (and (setq port-def (coerce lista 'string))
            (defparameter path-def nil)
            (defparameter query-def nil)
@@ -78,9 +74,9 @@
         (rest (cdr lista)))
     (if (and (equal id #\/) (not (null rest)))
         (set-path rest)
-      (and (defparameter path-def nul)
-           (defparameter query-def nul)
-           (defparameter fragment-def nul)))))
+      (and (defparameter path-def nil)
+           (defparameter query-def nil)
+           (defparameter fragment-def nil)))))
 
 ;gestione path
 (defun set-path (lista)
@@ -109,7 +105,7 @@
     (if (eq (car lista) id) '()
       (cons (car lista) (list-id (cdr lista) id)))))
 
-;metodo di controllo presenza id
+;metodo di controllo del member
 (defun check (id lista)
   (if (null (member id lista)) 
       nil
@@ -134,15 +130,14 @@
          (eq (car lista) #\@)
          (eq (car lista) #\.)
          (eq (car lista) #\:)) nil)
-         (T (identificatore-id (cdr lista)))))  
+         (T (identificatore-id (cdr lista)))))     
 
 ;controllo identificatore port
 (defun identificatore-port (lista)
   (cond ((null lista) T)
         ((null (digit-char-p (car lista))) nil)
-        (t (identificatore-port (cdr lista)))))
-   
+        (t (identificatore-port (cdr lista))))) 
 ;controllo query         
 (defun query-id (query)
   (if (eq (car query) #\#) nil 
-         (query-id (cdr query))))       
+         (query-id (cdr query))))  
