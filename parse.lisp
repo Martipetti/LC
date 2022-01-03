@@ -18,15 +18,18 @@
     (if (null (identificatore-id (list-id lista #\:))) (error "scheme non valido")
       (let ((scheme (list-id lista #\:))
             (rest (id-list lista #\:)))
-        (cond ((equal scheme '(#\m #\a #\i #\l #\t #\o))
+        (cond ((equalp scheme '(#\m #\a #\i #\l #\t #\o))
                (and (set-mailto rest) 
                     (setq scheme-def (coerce scheme 'string))))
-                ((equal scheme '(#\n #\e #\w #\s))
+                ((equalp scheme '(#\n #\e #\w #\s))
                  (and (set-news rest) 
                     (setq scheme-def (coerce scheme 'string))))
-                ((or (equal scheme '(#\t #\e #\l)) (equal scheme '(#\f #\a #\x)))
+                ((or (equalp scheme '(#\t #\e #\l)) (equal scheme '(#\f #\a #\x)))
                  (and (set-tel rest) 
-                    (setq scheme-def (coerce scheme 'string))))    
+                    (setq scheme-def (coerce scheme 'string))))
+               ((equalp scheme '(#\z #\o #\s))
+                 (and (set-zos rest) 
+                    (setq scheme-def (coerce scheme 'string))))
               (t (and (setq scheme-def (coerce scheme 'string))
                       (autorithy rest))))))))
 
@@ -247,6 +250,26 @@
 (defun query-id (lista)
   (cond ((null lista) T)
         ((eq (car lista) #\#) nil)
-        (t (query-id (cdr lista)))))  
+        (t (query-id (cdr lista))))) 
+
+;controllo id44
+(defun id44 (lista)
+  (cond ((null lista) T)
+        ((or (not (alphanumericp (car lista))) (eq (car lista) #\.)) nil)
+        ((> (lung lista) 44) nil)
+        (t (id44 (cdr lista)))))
+
+;controllo id8
+(defun id8 (lista)
+  (cond ((null lista) T)
+        ((not (alphanumericp (car lista))) nil)
+        ((> (lung lista) 8) nil)
+        (t (id8 (cdr lista)))))
+
+
+; lunghezza lista
+(defun lung (lista)
+   (cond ((null lista) 0)
+   (t (+ 1 (lung (cdr lista))))))
 
 
