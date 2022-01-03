@@ -7,7 +7,10 @@
     (make-uri :scheme scheme-def
               :userinfo userinfo-def
               :host host-def
-              :port port-def)))))
+              :port port-def
+              :path path-def
+              :query query-def
+              :fragment fragment-def)))))
 
 ;metodo di gestione dello scheme (controllare)       
 (defun set-scheme (lista)
@@ -27,7 +30,8 @@
       (if (and (equal id1 #\/) (equal id2 #\/)) 
         (set-userinfo rest)
         (and (defparameter userinfo-def nil) 
-             (defparameter host-def nil) 
+             (defparameter host-def nil)
+             (setq port-def "80") 
              (set-rest lista)))))
 
 ;metodo per gestione di path, query, id e fragment
@@ -80,18 +84,33 @@
 
 ;gestione path
 (defun set-path (lista)
-  (if (or (null lista) 
-          (null (list-id lista #\?))
-          (null (list-id lista #\#)))
-       (and (defparameter path-def nil)
-         (set-query lista))
+  (if (null lista) (defparameter path-def nil) 
     (if (check #\? lista)
-        (if (identificatore-id (list-id lista #\?))
-            (setq path-def (coerce (list-id lista #\?) 'string))
+        (if (identificatore-id (list-id lista #\?)) 
+        (and (setq path-def (coerce (list-id lista #\?) 'string)) (set-query (id-list lista #\?)))
+          (error "path non valida"))
+    (if (check #\# lista)
+        (if (identificatore-id (list-id lista #\#)) 
+        (and (setq path-def (coerce (list-id lista #\#) 'string)) (defparameter query-def nil) (set-fragment (id-list lista #\#)))
           (error "path non valida"))
       (if (identificatore-id lista)
-          (setq path-def (coerce lista 'string))
-        (error "path non valida")))))
+          (and (setq path-def (coerce lista 'string)) (defparameter query-def nil) (defparameter fragment-def nil))
+        (error "path non valida"))))))
+
+;gestione query
+(defun set-query (lista)
+  (if (null lista) (error "query non valida") 
+      (if (check #\# lista) 
+        (if (query-id (list-id lista #\#)) 
+        (and (setq query-def (coerce (list-id lista #\#) 'string)) (set-fragment (id-list lista #\#)))
+        (error "query non valida"))
+       (if (query-id lista) (and (setq query-def (coerce lista 'string)) (defparameter fragment-def nil))
+           (error "query non valida")))))
+
+;gestione fragment
+(defun set-fragment (lista)
+  (if (null lista) (error "fragment non valido")
+      (setq fragment-def (coerce lista 'string))))
 
 ;ritorna la lista da un id in poi
 (defun id-list (lista id)
@@ -137,6 +156,7 @@
   (cond ((null lista) T)
         ((null (digit-char-p (car lista))) nil)
         (t (identificatore-port (cdr lista))))) 
+
 ;controllo query         
 (defun query-id (lista)
   (cond ((null lista) T)
