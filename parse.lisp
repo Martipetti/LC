@@ -29,10 +29,18 @@
         (rest (cdr (cdr lista))))
       (if (and (equal id1 #\/) (equal id2 #\/)) 
         (set-userinfo rest)
+        (if (check #\/ lista) 
+         (and (defparameter userinfo-def nil) 
+             (defparameter host-def nil)
+             (setq port-def "80") 
+             (set-path (id-list lista #\/)))
         (and (defparameter userinfo-def nil) 
              (defparameter host-def nil)
              (setq port-def "80") 
-             (set-rest lista)))))
+             (defparameter path-def nil)
+             (defparameter query-def nil)
+             (defparameter fragment-def nil)     
+             )))))
 
 ;metodo per gestione di path, query, id e fragment
 (defun set-userinfo (lista)
@@ -53,7 +61,7 @@
               (if (null (identificatore-host (list-id lista #\/))) 
                   (error "host non valida")
                 (and (setq host-def (coerce (list-id lista #\/) 'string))
-                   (setq port-def "80") (set-rest lista))) ; non va bene bisogna passare anche / a set-rest
+                   (setq port-def "80") (set-path (id-list lista #\/)))) ; non va bene bisogna passare anche / a set-rest
             (and (setq host-def (coerce lista 'string))
                  (setq port-def "80")
                  (defparameter path-def nil)
@@ -65,22 +73,13 @@
   (if (check #\/ lista) 
     (if (null (identificatore-port (list-id lista #\/))) (error "port non valida")
         (and (setq port-def (coerce (list-id lista #\/) 'string))
-             (set-rest (id-list lista #\/)))) ; non va bene bisogna passare anche / a set-rest
+             (set-path (id-list lista #\/)))) ; non va bene bisogna passare anche / a set-rest
       (if (null (identificatore-port lista)) (error "port non valida")
         (and (setq port-def (coerce lista 'string))
            (defparameter path-def nil)
            (defparameter query-def nil)
            (defparameter fragment-def nil)))))
 
-;gestione 
-(defun set-rest (lista)
-  (let ((id (car lista))
-        (rest (cdr lista)))
-    (if (and (equal id #\/) (not (null rest)))
-        (set-path rest)
-      (and (defparameter path-def nil)
-           (defparameter query-def nil)
-           (defparameter fragment-def nil)))))
 
 ;gestione path
 (defun set-path (lista)
@@ -162,5 +161,6 @@
   (cond ((null lista) T)
         ((eq (car lista) #\#) nil)
         (t (query-id (cdr lista)))))  
+
 
 
