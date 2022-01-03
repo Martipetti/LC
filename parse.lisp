@@ -61,7 +61,7 @@
               (if (null (identificatore-host (list-id lista #\/))) 
                   (error "host non valida")
                 (and (setq host-def (coerce (list-id lista #\/) 'string))
-                   (setq port-def "80") (set-path (id-list lista #\/)))) ; non va bene bisogna passare anche / a set-rest
+                   (setq port-def "80") (set-path (id-list lista #\/)))) 
             (and (setq host-def (coerce lista 'string))
                  (setq port-def "80")
                  (defparameter path-def nil)
@@ -73,7 +73,7 @@
   (if (check #\/ lista) 
     (if (null (identificatore-port (list-id lista #\/))) (error "port non valida")
         (and (setq port-def (coerce (list-id lista #\/) 'string))
-             (set-path (id-list lista #\/)))) ; non va bene bisogna passare anche / a set-rest
+             (set-path (id-list lista #\/)))) 
       (if (null (identificatore-port lista)) (error "port non valida")
         (and (setq port-def (coerce lista 'string))
            (defparameter path-def nil)
