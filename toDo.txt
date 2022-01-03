@@ -1,5 +1,5 @@
 review code prolog
-problema metodo list-id
-gestione lista dei componenti uri
-gestione defstruct
+sintassi speciali LISP
+IP LISP
+
 
