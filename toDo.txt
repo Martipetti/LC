@@ -1,4 +1,3 @@
 review code prolog
 sintassi zos LISP
-IP LISP e Prolog
 uri-display LISP
