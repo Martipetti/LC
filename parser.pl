@@ -157,20 +157,19 @@ codaZ(SchemeRest, Userinfo, Host, Port, Path, Query, Fragment) :-
      duepunti(SchemeRest, SchemeRestAgg), 
      authorithy(SchemeRestAgg, Userinfo, Host, Port, PortRest), 
      pathSlash2(PortRest, PathRest, Path), 
-     coda(PathRest, _P,  Query, Fragment).
+     coda2(PathRest, Query, Fragment).
 
 %coda scheme zos senza authority
 codaZ(SchemeRest, [], [], '80', Path, Query, Fragment) :-
      duepunti(SchemeRest, SchemeRestAgg), 
      pathSlash2(SchemeRestAgg, PathRest, Path), 
-     coda(PathRest, _P,  Query, Fragment).
+     coda2(PathRest, Query, Fragment).
 
 %gestione dello scheme con controllo ':'
 scheme(URIString, Scheme, StringAgg) :-
     stringId(URIString, Stringa, SchemeProv), 
     duepunti(Stringa, StringAgg), 
     compress(SchemeProv, Scheme).
-
 
 %gestione authorithy:
 %caso userinfo e port
@@ -217,6 +216,12 @@ coda([C | PortRest], Path, Query, Fragment) :-
     queryQuestion(PathRest, QueryRest, Query),
     fragmentHastag(QueryRest, [], Fragment).
 coda([], [], [], []).
+
+%coda zos
+coda2(PathRest, Query, Fragment) :-
+    queryQuestion(PathRest, QueryRest, Query), !,
+    fragmentHastag(QueryRest, [], Fragment).
+coda2([], [], []).
 
 
 %metodi usati in coda
