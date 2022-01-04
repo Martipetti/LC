@@ -266,6 +266,28 @@
         ((> (lung lista) 8) nil)
         (t (id8 (cdr lista)))))
 
+;gestione zos     
+(defun set-zos (lista)
+  (if (null lista) (error "sistassi zos non valida")
+      
+     ))                                 
+;metodo path-zos     da controllare e semplificare 
+(defun path-zos (lista)
+  (if (null lista) (error "sistassi zos non valida")
+    (if (check #\( lista)
+        (if (id44 (list-id lista #\())
+            (let (zos (list-id lista #\())
+             (append zos '(#\())
+             (if (check #\) lista)
+                 (if (id8 (remove #\) (id-list lista #\()))
+                     (and (append zos (id-list lista #\())(append zos '(#\)))(setq path-def (coerce zos 'string)))
+                     (error "sistassi id8 non valida"))
+                (error "sistassi zos non valida")))
+                (error "sistassi id44 non valida"))
+   (if (id44 lista)
+       (setq path-def (coerce lista 'string))
+       (error "sintassi id44 non valida")))))
+
 
 ; lunghezza lista
 (defun lung (lista)
