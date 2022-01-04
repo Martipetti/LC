@@ -50,8 +50,7 @@
                (and (setq userinfo-def (coerce userinfo 'string))
                     (setq host-def (coerce host 'string)))))
          (if (null lista)
-             (and (defparameter userinfo-def nil)
-                  (defparameter host-def nil))
+               (aut)
            (if (not (identificatore-id lista))
                (error "sistassi mailto non valida")
              (and (setq userinfo-def (coerce lista 'string))
@@ -61,8 +60,7 @@
 ;gestione news
 (defun set-news (lista)
   (if (null lista)
-      (and  (defparameter userinfo-def nil)
-            (defparameter host-def nil)
+      (and  (aut)
             (coda))
         (if (identificatore-host lista)
             (and (setq host-def (coerce lista 'string))
@@ -73,8 +71,7 @@
 ;gestione tel e fax
 (defun set-tel (lista)
   (if (null lista)
-      (and  (defparameter userinfo-def nil)
-            (defparameter host-def nil)
+      (and  (aut) 
             (coda))
         (if (identificatore-id lista)
             (and (setq userinfo-def (coerce lista 'string))
@@ -90,8 +87,7 @@
       (if (and (equal id1 #\/) (equal id2 #\/)) 
         (set-userinfo rest)
         (if (check #\/ lista) 
-         (and (defparameter userinfo-def nil) 
-             (defparameter host-def nil)
+         (and (aut)
              (setq port-def "80") 
              (set-path (id-list lista #\/)))
         (if (or (check #\? lista) (check #\# lista))
@@ -340,5 +336,9 @@
       (defparameter path-def nil)
       (defparameter query-def nil)
      (defparameter fragment-def nil)))
+
+(defun aut ()
+ (and (defparameter userinfo-def nil)
+      (defparameter host-def nil)))    
                      
 
