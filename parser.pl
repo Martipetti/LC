@@ -152,13 +152,18 @@ zos([C1, C2, C3], Scheme) :-
     C1 == 'z', C2 == 'o', C3 == 's',
     compress([C1, C2, C3], Scheme).
 
-%coda scheme zos
+%coda scheme zos con authority
 codaZ(SchemeRest, Userinfo, Host, Port, Path, Query, Fragment) :-
      duepunti(SchemeRest, SchemeRestAgg), 
      authorithy(SchemeRestAgg, Userinfo, Host, Port, PortRest), 
      pathSlash2(PortRest, PathRest, Path), 
      coda(PathRest, _P,  Query, Fragment).
 
+%coda scheme zos senza authority
+codaZ(SchemeRest, [], [], '80', Path, Query, Fragment) :-
+     duepunti(SchemeRest, SchemeRestAgg), 
+     pathSlash2(SchemeRestAgg, PathRest, Path), 
+     coda(PathRest, _P,  Query, Fragment).
 
 %gestione dello scheme con controllo ':'
 scheme(URIString, Scheme, StringAgg) :-
