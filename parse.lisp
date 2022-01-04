@@ -92,8 +92,7 @@
              (set-path (id-list lista #\/)))
         (if (or (check #\? lista) (check #\# lista))
             (error "URI non valida")
-         (and (defparameter userinfo-def nil) 
-             (defparameter host-def nil)
+         (and (aut)
              (coda)))))))
 
 ;metodo per gestione di path, query, id e fragment
