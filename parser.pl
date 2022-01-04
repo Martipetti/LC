@@ -205,16 +205,10 @@ authorithy([S1, S2 | SchemeRest], [], Host, '80', HostRest) :-
     compress(HostProv, Host).
 
 %gestione metodo coda:
-%con authority 
+%con e senza authority 
 coda([C | PortRest], Path, Query, Fragment) :-
     C == '/', !,
     pathSlash(PortRest, PathRest, Path),
-    queryQuestion(PathRest, QueryRest, Query),
-    fragmentHastag(QueryRest, [], Fragment).
-coda([], [], [], []).
-%gestione metodo coda senza authority
-coda(PortRest, Path, Query, Fragment) :-
-    pathSlash(PortRest, PathRest, Path), !,
     queryQuestion(PathRest, QueryRest, Query),
     fragmentHastag(QueryRest, [], Fragment).
 coda([], [], [], []).
