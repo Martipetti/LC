@@ -1,5 +1,5 @@
 review code prolog
-sintassi speciali LISP
+sintassi zos LISP
 IP LISP
 Controllare in prolog che se non c'è la / non si può accedere alla coda e dovrebbe dare errore 
-
+uri-display LISP
