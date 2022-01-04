@@ -56,27 +56,18 @@
                (error "sistassi mailto non valida")
              (and (setq userinfo-def (coerce lista 'string))
                   (defparameter host-def nil)))))
-       (and (setq port-def "80")
-            (defparameter path-def nil)
-            (defparameter query-def nil)
-            (defparameter fragment-def nil))))
+       (coda)))
 
 ;gestione news
 (defun set-news (lista)
   (if (null lista)
       (and  (defparameter userinfo-def nil)
             (defparameter host-def nil)
-            (setq port-def "80")
-            (defparameter path-def nil)
-            (defparameter query-def nil)
-            (defparameter fragment-def nil))
+            (coda))
         (if (identificatore-host lista)
             (and (setq host-def (coerce lista 'string))
                  (defparameter userinfo-def nil)
-                 (setq port-def "80")
-                 (defparameter path-def nil)
-                 (defparameter query-def nil)
-                 (defparameter fragment-def nil))
+                 (coda))
             (error "sistassi news non valida"))))
 
 ;gestione tel e fax
@@ -84,17 +75,11 @@
   (if (null lista)
       (and  (defparameter userinfo-def nil)
             (defparameter host-def nil)
-            (setq port-def "80")
-            (defparameter path-def nil)
-            (defparameter query-def nil)
-            (defparameter fragment-def nil))
+            (coda))
         (if (identificatore-id lista)
             (and (setq userinfo-def (coerce lista 'string))
                  (defparameter host-def nil)
-                 (setq port-def "80")
-                 (defparameter path-def nil)
-                 (defparameter query-def nil)
-                 (defparameter fragment-def nil))
+                 (coda))
             (error "sistassi tel e fax non valida"))))                      
 
 ;metodo di gestione authority 
@@ -113,10 +98,7 @@
             (error "URI non valida")
          (and (defparameter userinfo-def nil) 
              (defparameter host-def nil)
-             (setq port-def "80") 
-             (defparameter path-def nil)
-             (defparameter query-def nil)
-             (defparameter fragment-def nil)))))))
+             (coda)))))))
 
 ;metodo per gestione di path, query, id e fragment
 (defun set-userinfo (lista)
@@ -153,16 +135,8 @@
              (if (identificatore-host lista) 
                  (if (and (= (lung lista) 15)
                           (ip lista))
-                     (and (setq host-def (coerce lista 'string))
-                          (setq port-def "80")
-                          (defparameter path-def nil)
-                          (defparameter query-def nil)
-                          (defparameter fragment-def nil))
-                   (and (setq host-def (coerce lista 'string))
-                        (setq port-def "80")
-                        (defparameter path-def nil)
-                        (defparameter query-def nil)
-                        (defparameter fragment-def nil)))
+                          (and (setq host-def (coerce lista 'string)) (coda))
+                   (and (setq host-def (coerce lista 'string)) (coda)))
                (error "host non valida"))))))
 
 ;gestione port
@@ -360,5 +334,11 @@
        ((equal n #\8) 8)
        ((equal n #\9) 9)
        (t nil)))
-
+     
+(defun coda ()
+ (and (setq port-def "80")
+      (defparameter path-def nil)
+      (defparameter query-def nil)
+     (defparameter fragment-def nil)))
+                     
 
