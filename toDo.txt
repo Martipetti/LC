@@ -1,3 +1,4 @@
 review code prolog
 sintassi zos LISP
-uri-display LISP
+uri-display LISP con stream
+sistemare mailto con IP
