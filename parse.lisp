@@ -1,6 +1,19 @@
 (defstruct uri scheme userinfo host port path query fragment)
 
-(defun uri-parse (stringa)
+(defun uri-display (stringa)
+  (if (null (uri-stampa stringa)) T))
+
+(defun uri-stampa (stringa)
+  (let ((uri (uri-parse stringa)))
+    (format t "~d    ~d~%" "Scheme: " (uri-scheme uri))
+    (format t "~d  ~d~%" "Userinfo: " (uri-userinfo uri))
+    (format t "~d      ~d~%" "Host: " (uri-host uri))
+    (format t "~d      ~d~%" "Port: " (uri-port uri))
+    (format t "~d      ~d~%" "Path: " (uri-path uri))
+    (format t "~d     ~d~%" "Query: " (uri-query uri))
+    (format t "~d  ~d~%" "Fragment: " (uri-fragment uri)))) 
+
+(defun uri-parse (stringa) 
   (let ((lista (coerce stringa 'list)))
   (if (null stringa) (error "stringa vuota")
     (and (set-scheme lista)
@@ -62,15 +75,11 @@
   (if (null lista)
       (and  (aut)
             (coda))
-        (if (and (= (lung lista) 15)(ip lista))
-                 (and (setq host-def (coerce lista 'string))
-                 (defparameter userinfo-def nil)
-                 (coda))
         (if (identificatore-host lista)
-                 (and (setq host-def (coerce lista 'string))
+            (and (setq host-def (coerce lista 'string))
                  (defparameter userinfo-def nil)
                  (coda))
-                 (error "sistassi news non valida")))))
+            (error "sistassi news non valida"))))
 
 ;gestione tel e fax
 (defun set-tel (lista)
@@ -266,21 +275,21 @@
       ;ramo else mancante
      ))  
                                
-;metodo path-zos  
+;metodo path-zos     da controllare e semplificare 
 (defun path-zos (lista)
   (if (null lista) (error "sistassi zos non valida")
     (if (check #\( lista)
-        (let ((pa #\()
-              (pc #\))) 
-           (if (id44 (list-id lista pa))
-            (and (append (list-id lista pa) '(#\())
-              (if (check pc lista)
-                  (if (id8 (remove #\) (id-list lista pa)))
-                      (and (append (append (list-id lista pa) '(#\()) (id-list lista pa))
-                           (setq path-def (coerce(append (append (list-id lista pa) '(#\()) (id-list lista pa)) 'string))(write path-def))
+        (if (id44 (list-id lista #\())
+            (let (zos (list-id lista #\())
+              (append zos '(#\())
+              (if (check #\) lista)
+                  (if (id8 (remove #\) (id-list lista #\()))
+                      (and (append zos (id-list lista #\())
+                           (append zos '(#\)))
+                           (setq path-def (coerce zos 'string)))
                     (error "sistassi id8 non valida"))
                 (error "sistassi zos non valida")))
-          (error "sistassi id442 non valida")))
+          (error "sistassi id44 non valida"))
       (if (id44 lista)
           (setq path-def (coerce lista 'string))
         (error "sintassi id44 non valida")))))
@@ -342,6 +351,4 @@
 
 (defun aut ()
  (and (defparameter userinfo-def nil)
-      (defparameter host-def nil)))    
-                     
-
+      (defparameter host-def nil))) 
