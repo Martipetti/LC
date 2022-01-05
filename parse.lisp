@@ -198,7 +198,9 @@
 
 ;gestione path di zos, estensione di path per caso zos
 (defun set-path-zos (lista)
-  (defparameter path-def "test zos"))
+  (if (check-zos lista)
+      (defparameter path-def (coerce lista 'string))
+    (error "zos non valido")))
 
 ;gestione query
 (defun set-query (lista)
@@ -299,6 +301,33 @@
           ((<= (somma n1 n2 n3) 255) (ip-num rest))
           (t (error "ip non valido")))))
 
+;identificatore per id 44 e id8  
+(defun identificatore-id44 (lista)
+  (cond ((null lista) T)
+        ((and (not (alpha-char-p (car lista)))
+              (not (equal (car lista) #\.)))
+         nil)
+        (t (identificatore-id44 (cdr lista)))))
+
+(defun identificatore-id8 (lista)
+  (cond ((null lista) T)
+        ((not (alpha-char-p (car lista))) nil)
+        (t Identificatore-id8 (cdr lista))))
+
+;check zos
+(defun check-zos (lista)
+  (let ((id44 (or (list-id lista #\() lista))
+        (id8 (id-list lista #\))))
+    (if (and (<= (lung id44) 44) 
+             (identificatore-id44 id44)
+             (not (equal (last id44) #\.)))
+        (if (null id8)
+            T
+          (if (and (identificatore-id8 (list-id id8 #\))) 
+                   (<= (lung id8) 8))
+              T
+            nil)))))
+          
 ;somma
 (defun somma (n1 n2 n3)
   (+ (* n1 100) (* n2 10) n3))
