@@ -75,11 +75,15 @@
   (if (null lista)
       (and  (aut)
             (coda))
-        (if (identificatore-host lista)
-            (and (setq host-def (coerce lista 'string))
+        (if (and (= (lung lista) 15)(ip lista))
+                 (and (setq host-def (coerce lista 'string))
                  (defparameter userinfo-def nil)
                  (coda))
-            (error "sistassi news non valida"))))
+        (if (identificatore-host lista)
+                 (and (setq host-def (coerce lista 'string))
+                 (defparameter userinfo-def nil)
+                 (coda))
+                 (error "sistassi news non valida")))))
 
 ;gestione tel e fax
 (defun set-tel (lista)
