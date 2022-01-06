@@ -1,3 +1,2 @@
 review code prolog
-sintassi zos LISP
 uri-display LISP con stream
