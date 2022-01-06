@@ -1,8 +1,11 @@
 (defstruct uri scheme userinfo host port path query fragment)
 
 (defun uri-display (stringa &optional stream)
-  (if (null (uri-stampa stringa)) 
-       T))
+  (if (null stream)
+      (if (null (uri-stampa stringa)) 
+          T)
+  ;gestione else, se stream non è null 
+  ))
 
 (defun uri-stampa (stringa)
     (format t "~d    ~d~%" "Scheme: " (uri-scheme stringa))
@@ -304,27 +307,28 @@
 ;identificatore per id 44 e id8  
 (defun identificatore-id44 (lista)
   (cond ((null lista) T)
-        ((and (not (alphanumericp (car lista)))
+        ((and (not (alpha-char-p (car lista)))
               (not (equal (car lista) #\.)))
          nil)
         (t (identificatore-id44 (cdr lista)))))
 
 (defun identificatore-id8 (lista)
   (cond ((null lista) T)
-        ((not (alphanumericp (car lista))) nil)
-        (t (identificatore-id8 (cdr lista)))))
+        ((not (alpha-char-p (car lista))) nil)
+        (t Identificatore-id8 (cdr lista))))
 
 ;check zos
 (defun check-zos (lista)
   (let ((id44 (or (list-id lista #\() lista))
-        (id8 (id-list lista #\()))
+        (id8 (id-list lista #\))))
     (if (and (<= (lung id44) 44) 
              (identificatore-id44 id44)
              (not (equal (last id44) #\.)))
         (if (null id8)
             T
-          (if (and (write id8)(identificatore-id8 (remove #\) id8)) 
-                   (<= (lung id8) 8)) T
+          (if (and (identificatore-id8 (list-id id8 #\))) 
+                   (<= (lung id8) 8))
+              T
             nil)))))
           
 ;somma
@@ -353,5 +357,4 @@
 
 (defun aut ()
  (and (defparameter userinfo-def nil)
-      (defparameter host-def nil)))
-
+      (defparameter host-def nil))) 
