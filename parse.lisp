@@ -4,8 +4,11 @@
   (if (null stream)
       (if (null (uri-stampa stringa)) 
           T)
-  ;gestione else, se stream non è null 
-  ))
+    (with-open-file (str stream
+                     :direction :output
+                     :if-exists :supersede
+                     :if-does-not-exist :create)
+  (format str "~S" (uri-stampa stringa)))))
 
 (defun uri-stampa (stringa)
     (format t "~d    ~d~%" "Scheme: " (uri-scheme stringa))
