@@ -346,8 +346,15 @@ digit(C):-
 pathId([C|Cs], Cs1, [C|Is]) :-
     C\='?', C\='#', C\='@', C\=':', C\='/',
     !, 
-    pathId(Cs, Cs1, Is).
+    pathId2(Cs, Cs1, Is).
 pathId(Cs, Cs, []).
+
+%identificazione path2
+pathId2([C|Cs], Cs1, [C|Is]) :-
+    C\='?', C\='#', C\='@', C\=':',
+    !, 
+    pathId2(Cs, Cs1, Is).
+pathId2(Cs, Cs, []).
 
 %identificazione port
 portId([C |Cs], Cs1, [C | Is]) :-
