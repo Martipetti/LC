@@ -123,7 +123,8 @@
   (if (null (check #\@ lista)) 
       (and (defparameter userinfo-def nil) 
            (set-host lista))
-    (if (null (identificatore-id (list-id lista #\@))) (error "userinfo non valida")
+    (if (null (identificatore-id (list-id lista #\@))) 
+      (error "userinfo non valida");
       (and (setq userinfo-def (coerce (list-id lista #\@) 'string)) 
            (set-host (id-list lista #\@))))))
 
@@ -160,7 +161,8 @@
 ;gestione port
 (defun set-port (lista)     
   (if (check #\/ lista) 
-      (if (null (identificatore-port (list-id lista #\/))) (error "port non valida")
+      (if (null (identificatore-port (list-id lista #\/))) 
+        (error "port non valida");
         (and (setq port-def (coerce (list-id lista #\/) 'string))
              (set-path (id-list lista #\/)))) 
     (if (null (identificatore-port lista)) (error "port non valida")
