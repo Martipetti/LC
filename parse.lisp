@@ -4,21 +4,12 @@
   (if (null stream)
       (if (null (uri-stampa stringa)) 
           T)
-    (with-open-file (str stream
-                         :direction :output
-                         :if-exists :supersede
-                         :if-does-not-exist :create)
-      (format str "~S" (uri-stampa stringa)))))
-
-(defun uri-display (stringa &optional stream)
-  (if (null stream)
-      (if (null (uri-stampa stringa)) 
-          T)
-    ((setq filep (open stream  :direction output
-                               :if-exists :overwrite
-                               :if-does-not-exists :create))
-       (write-line (uri-stampa stringa) filep)
-       (close filep))))                       ;versione nuova di ury-display prova se funziona 
+    (and (setq filep (open stream  :direction :output
+                                   :if-exists :overwrite
+                                   :if-does-not-exist :create))
+       (write (uri-stampa stringa) :stream filep) ;problemi con questa istruzione
+       (write "ciao")
+       (close filep))))       
 
 (defun uri-stampa (stringa)
   (format t "~d    ~d~%" "Scheme: " (uri-scheme stringa))
