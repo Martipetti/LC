@@ -10,6 +10,16 @@
     (write (uri-stampa stringa) :stream file)
     (close file))))     
 
+(defun uri-display (stringa &optional stream)
+  (if (null stream)
+      (if (null (uri-stampa stringa)) 
+          T)
+    (with-open-file (out stream :direction :output
+                                :if-exists :supersede
+                                :if-does-not-exist :create)
+     (write (uri-stampa stringa) :stream out)              
+    )))
+
 (defun uri-stampa (stringa)
   (format t "~d    ~d~%" "Scheme: " (uri-scheme stringa))
   (format t "~d  ~d~%" "Userinfo: " (uri-userinfo stringa))
