@@ -4,12 +4,11 @@
   (if (null stream)
       (if (null (uri-stampa stringa)) 
           T)
-    (and (setq filep (open stream  :direction :output
-                                   :if-exists :overwrite
-                                   :if-does-not-exist :create))
-       (write (uri-stampa stringa) :stream filep) ;problemi con questa istruzione
-       (write "ciao")
-       (close filep))))       
+    (let ((file (open stream    :direction :output
+                                :if-exists :overwrite
+                                :if-does-not-exist :create)))
+    (write (uri-stampa stringa) :stream file)
+    (close file))))     
 
 (defun uri-stampa (stringa)
   (format t "~d    ~d~%" "Scheme: " (uri-scheme stringa))
