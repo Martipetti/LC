@@ -10,6 +10,16 @@
                          :if-does-not-exist :create)
       (format str "~S" (uri-stampa stringa)))))
 
+(defun uri-display (stringa &optional stream)
+  (if (null stream)
+      (if (null (uri-stampa stringa)) 
+          T)
+    ((setq filep (open stream  :direction output
+                               :if-exists :overwrite
+                               :if-does-not-exists :create))
+       (write-line (uri-stampa stringa) filep)
+       (close filep))))                       ;versione nuova di ury-display prova se funziona 
+
 (defun uri-stampa (stringa)
   (format t "~d    ~d~%" "Scheme: " (uri-scheme stringa))
   (format t "~d  ~d~%" "Userinfo: " (uri-userinfo stringa))
