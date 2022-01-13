@@ -1,4 +1,4 @@
--*- Mode: Prolog -*- 
+%%%-*- Mode: Prolog -*- 
 
 uri_parse(URIString, URI) :-
     %%%passaggio dalla stringa a una lista di caratteri
@@ -319,7 +319,7 @@ hostId([N1, N2, N3, P1, N4, N5, N6, P2, N7, N8, N9, P3, N10, N11, N12 | Cs], Cs,
     ip([N1, N2, N3, N4, N5, N6, N7, N8, N9, N10, N11, N12]).
 
 %identificazione host
-hostId([C|Cs], Cs1, [C|Is]) :- 
+hostId([C | Cs], Cs1, [C | Is]) :- 
     C\='/', C\='?', C\='#', C\='@', C\=':', C\='.',
     !, 
     stringId(Cs, Cs1, Is).
@@ -345,36 +345,36 @@ digit(C):-
     C=<255.
 
 %identificazione path
-pathId([C|Cs], Cs1, [C|Is]) :-
+pathId([C | Cs], Cs1, [C | Is]) :-
     C\='?', C\='#', C\='@', C\=':', C\='/',
     !, 
     pathId2(Cs, Cs1, Is).
 pathId(Cs, Cs, []).
 
 %identificazione path2
-pathId2([C|Cs], Cs1, [C|Is]) :-
+pathId2([C | Cs], Cs1, [C | Is]) :-
     C\='?', C\='#', C\='@', C\=':',
     !, 
     pathId2(Cs, Cs1, Is).
 pathId2(Cs, Cs, []).
 
 %identificazione port
-portId([C |Cs], Cs1, [C | Is]) :-
+portId([C | Cs], Cs1, [C | Is]) :-
     is_digit(C),
     !, 
     portId(Cs, Cs1, Is).
 portId(Cs, Cs, []).
 
 %identificazione query
-queryId([C|Cs], Cs1, [C|Is]) :-
+queryId([C | Cs], Cs1, [C | Is]) :-
     C\='#', 
     !, 
     queryId(Cs, Cs1, Is).
 queryId(Cs, Cs, []).
 
 %identificazione fragment
-fragmentId([C|Cs], Cs1, [C|Is]) :-
-    %!, 
+fragmentId([C | Cs], Cs1, [C | Is]) :-
+    !, 
     fragmentId(Cs, Cs1, Is).
 fragmentId(Cs, Cs, []).
 
