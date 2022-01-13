@@ -21,10 +21,14 @@ uri_parse2(URIString, URI) :-
 uri_display(URIString) :-
     %lista(['Scheme', 'Userinfo', 'Host', 'Port', 'Path', 'Query', 'Fragment']),
     uri_parse2(URIString, URI), 
-    stampa(['Scheme', 'Userinfo', 'Host', 'Port', 'Path', 'Query', 'Fragment'], URI).
+    stampa(['Scheme', 'Userinfo', 'Host', 'Port', 'Path', 'Query', 'Fragment'],
+	   URI).
 %gestione write
 stampa([E1 | Lista], [E2 | URI]) :-
-    write(E1), write(':'), write(E2), nl, 
+    write(E1),
+    write(':'),
+    write(E2),
+    nl, 
     stampa(Lista, URI).
 stampa([], []).
 
@@ -32,7 +36,8 @@ stampa([], []).
 uri_display(URIString, File) :-
     %lista(['Scheme', 'Userinfo', 'Host', 'Port', 'Path', 'Query', 'Fragment']),
     uri_parse2(URIString, URI), 
-    stampa2(['Scheme', 'Userinfo', 'Host', 'Port', 'Path', 'Query', 'Fragment'], URI, File).
+    stampa2(['Scheme', 'Userinfo', 'Host', 'Port', 'Path', 'Query', 'Fragment'],
+	    URI, File).
 %apertura e chiusura stream
 stampa2(Lista, URI, F) :-
     open(F, write, File),
@@ -50,7 +55,8 @@ stampa3([], [], _F).
 
 %metodo di gestione generale dell'uri 
 %metodi per mailto 
-gestion([C1, C2, C3, C4, C5, C6 | SchemeRest], Scheme, Userinfo, Host, [], '80', [], []) :-
+gestion([C1, C2, C3, C4, C5, C6 | SchemeRest], Scheme, Userinfo, Host, [],
+	'80', [], []) :-
     %controllo sintassi 'mailto'
     mailto([C1, C2, C3, C4, C5, C6], Scheme), !,
     %metodo gestione userinfo e host
@@ -78,7 +84,8 @@ gestion([C1, C2, C3| SchemeRest], Scheme, Userinfo, [], '80', [], [], []) :-
     codaT(SchemeRest, Userinfo).
 
 %metodi per zos
-gestion([C1, C2, C3| SchemeRest], Scheme, Userinfo, Host, Port, Path, Query, Fragment) :- 
+gestion([C1, C2, C3| SchemeRest], Scheme, Userinfo, Host, Port, Path, Query,
+	Fragment) :- 
     %controllo sintassi 'zos'
     zos([C1, C2, C3], Scheme), !,
     %metodo gestione path
@@ -306,7 +313,8 @@ stringId([C|Cs], Cs1, [C|Is]) :-
 stringId(Cs, Cs, []).
 
 %versione host per ip
-hostId([N1, N2, N3, P1, N4, N5, N6, P2, N7, N8, N9, P3, N10, N11, N12 | Cs], Cs, 
+hostId([N1, N2, N3, P1, N4, N5, N6, P2, N7, N8, N9, P3, N10, N11, N12 | Cs],
+       Cs, 
        [N1, N2, N3, P1, N4, N5, N6, P2, N7, N8, N9, P3, N10, N11, N12]) :-
     is_digit(N1), is_digit(N2), is_digit(N3),
     P1 == '.',
