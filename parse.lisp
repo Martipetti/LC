@@ -4,21 +4,13 @@
   (if (null stream)
       (if (null (uri-stampa stringa)) 
           T)
-    (let ((file (open stream    :direction :output
-                                :if-exists :overwrite
-                                :if-does-not-exist :create)))
-    (write (uri-stampa stringa) :stream file)
-    (close file))))     
+    (with-open-file (out stream 
+                         :direction :output
+                         :if-exists :supersede
+                         :if-does-not-exist :create)
+		    (write (uri-stampa stringa) :stream out)                            
+		    )))
 
-(defun uri-display (stringa &optional stream)
-  (if (null stream)
-      (if (null (uri-stampa stringa)) 
-          T)
-    (with-open-file (out stream :direction :output
-                                :if-exists :supersede
-                                :if-does-not-exist :create)
-     (write (uri-stampa stringa) :stream out)              
-    )))
 
 (defun uri-stampa (stringa)
   (format t "~d    ~d~%" "Scheme: " (uri-scheme stringa))
@@ -41,7 +33,7 @@
                      :query query-def
                      :fragment fragment-def)))))
 
-;metodo di gestione dello scheme (controllare)       
+;;;metodo di gestione dello scheme (controllare)       
 (defun set-scheme (lista)
   (if (null (check #\: lista)) 
       (error "URI non valida")
@@ -63,7 +55,7 @@
                       (autorithy rest))))))))
 
 
-;gestione mailto
+;;;gestione mailto
 (defun set-mailto (lista)
   (and (if (check #\@ lista)
            (let ((userinfo (list-id lista #\@))
@@ -86,7 +78,7 @@
                   (defparameter host-def nil)))))
        (coda)))
 
-;gestione news
+;;;gestione news
 (defun set-news (lista)
   (if (null lista)
       (and  (aut)
@@ -101,7 +93,7 @@
                (coda))
         (error "sistassi news non valida")))))
 
-;gestione tel e fax
+;;;gestione tel e fax
 (defun set-tel (lista)
   (if (null lista)
       (and  (aut) 
@@ -265,7 +257,7 @@
             (eq (car lista) #\:)) nil)
         (T (identificatore-id (cdr lista)))))
 
-;controllo identificatore  path
+;controllo identificatore path
 (defun identificatore-path (lista)
   (cond ((null lista) T)
         ((or(eq (car lista) #\/)
@@ -275,7 +267,7 @@
             (eq (car lista) #\:)) nil)
         (T (identificatore-path2 (cdr lista)))))        
 
-;controllo identificatore  path2
+;controllo identificatore path2
 (defun identificatore-path2 (lista)
   (cond ((null lista) T)
         ((or
@@ -284,7 +276,7 @@
           (eq (car lista) #\@)
           (eq (car lista) #\:)) nil)
         (T (identificatore-path2 (cdr lista)))))         
-   
+
 ;controllo identificatore host
 (defun identificatore-host (lista)
   (cond ((null lista) T)
@@ -308,7 +300,7 @@
         ((eq (car lista) #\#) nil)
         (t (query-id (cdr lista))))) 
 
-; lunghezza lista
+;lunghezza lista
 (defun lung (lista)
   (cond ((null lista) 0)
         (t (+ 1 (lung (cdr lista))))))
@@ -364,7 +356,7 @@
           (if (and (write id8)(identificatore-id8 (remove #\) id8)) 
                    (<= (lung id8) 8)) T
             nil)))))
-          
+
 ;somma
 (defun somma (n1 n2 n3)
   (+ (* n1 100) (* n2 10) n3))
@@ -382,7 +374,7 @@
         ((equal n #\8) 8)
         ((equal n #\9) 9)
         (t nil)))
-     
+
 (defun coda ()
   (and (setq port-def "80")
        (defparameter path-def nil)
@@ -392,3 +384,5 @@
 (defun aut ()
   (and (defparameter userinfo-def nil)
        (defparameter host-def nil)))
+
+
