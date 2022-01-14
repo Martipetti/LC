@@ -6,9 +6,16 @@
           T)
     (with-open-file (out stream 
                          :direction :output
-                         :if-exists :supersede
+                         :if-exists :overwrite
                          :if-does-not-exist :create)
-		    (write (uri-stampa stringa) :stream out)                            
+		    (format out "~d    ~d~%" "Scheme: " (uri-scheme stringa))
+		    (format out "~d  ~d~%" "Userinfo: " (uri-userinfo stringa))
+		    (format out "~d      ~d~%" "Host: " (uri-host stringa))
+		    (format out "~d      ~d~%" "Port: " (uri-port stringa))
+		    (format out "~d      ~d~%" "Path: " (uri-path stringa))
+		    (format out "~d     ~d~%" "Query: " (uri-query stringa))
+		    (format out "~d  ~d~%" "Fragment: " (uri-fragment stringa))
+		    (write (uri-stampa stringa))                      
 		    )))
 
 
@@ -104,7 +111,7 @@
              (coda))
       (error "sistassi tel e fax non valida"))))                      
 
-;metodo di gestione authority 
+					;metodo di gestione authority 
 (defun autorithy (lista)
   (let ((id1 (car lista))
         (id2 (car (cdr lista)))
@@ -120,7 +127,7 @@
           (and (aut)
                (coda)))))))
 
-;metodo per gestione di path, query, id e fragment
+					;metodo per gestione di path, query, id e fragment
 (defun set-userinfo (lista)
   (if (null (check #\@ lista)) 
       (and (defparameter userinfo-def nil) 
@@ -130,7 +137,7 @@
       (and (setq userinfo-def (coerce (list-id lista #\@) 'string)) 
            (set-host (id-list lista #\@))))))
 
-;gestione host
+					;gestione host
 (defun set-host (lista)
   (if (null lista) (error "host non valida")
     (if (check #\: lista)
@@ -160,7 +167,7 @@
               (and (setq host-def (coerce lista 'string)) (coda)))
           (error "host non valida"))))))
 
-;gestione port
+					;gestione port
 (defun set-port (lista)     
   (if (check #\/ lista) 
       (if (null (identificatore-port (list-id lista #\/))) 
@@ -174,7 +181,7 @@
            (defparameter fragment-def nil)))))
 
 
-;gestione path
+					;gestione path
 (defun set-path (lista)
   (if (null lista) 
       (and (defparameter path-def nil)
@@ -206,13 +213,13 @@
              (defparameter query-def nil) 
              (defparameter fragment-def nil))))))
 
-;gestione path di zos, estensione di path per caso zos
+					;gestione path di zos, estensione di path per caso zos
 (defun set-path-zos (lista)
   (if (check-zos lista)
       (defparameter path-def (coerce lista 'string))
     (error "zos non valido")))
 
-;gestione query
+					;gestione query
 (defun set-query (lista)
   (if (null lista) (error "query non valida") 
     (if (check #\# lista) 
@@ -224,30 +231,30 @@
                                 (defparameter fragment-def nil))
         (error "query non valida")))))
 
-;gestione fragment
+					;gestione fragment
 (defun set-fragment (lista)
   (if (null lista) (error "fragment non valido")
     (setq fragment-def (coerce lista 'string))))
 
-;ritorna la lista da un id in poi
+					;ritorna la lista da un id in poi
 (defun id-list (lista id)
   (if (null lista) nil
     (if (equal (car lista) id) (cdr lista)
       (id-list (cdr lista) id))))
 
-;ritorna la lista dall'inizio fino ad un certo id
+					;ritorna la lista dall'inizio fino ad un certo id
 (defun list-id (lista id)
   (if (null lista) nil
     (if (eq (car lista) id) '()
       (cons (car lista) (list-id (cdr lista) id)))))
 
-;metodo di controllo del member
+					;metodo di controllo del member
 (defun check (id lista)
   (if (null (member id lista)) 
       nil
     T))
 
-;controllo identificatore  
+					;controllo identificatore  
 (defun identificatore-id (lista)
   (cond ((null lista) T)
         ((or(eq (car lista) #\/)
@@ -257,7 +264,7 @@
             (eq (car lista) #\:)) nil)
         (T (identificatore-id (cdr lista)))))
 
-;controllo identificatore path
+					;controllo identificatore path
 (defun identificatore-path (lista)
   (cond ((null lista) T)
         ((or(eq (car lista) #\/)
@@ -267,7 +274,7 @@
             (eq (car lista) #\:)) nil)
         (T (identificatore-path2 (cdr lista)))))        
 
-;controllo identificatore path2
+					;controllo identificatore path2
 (defun identificatore-path2 (lista)
   (cond ((null lista) T)
         ((or
@@ -277,7 +284,7 @@
           (eq (car lista) #\:)) nil)
         (T (identificatore-path2 (cdr lista)))))         
 
-;controllo identificatore host
+					;controllo identificatore host
 (defun identificatore-host (lista)
   (cond ((null lista) T)
         ((or(eq (car lista) #\/)
@@ -288,29 +295,29 @@
             (eq (car lista) #\:)) nil)
         (T (identificatore-id (cdr lista)))))  
 
-;controllo identificatore port
+					;controllo identificatore port
 (defun identificatore-port (lista)
   (cond ((null lista) T)
         ((null (digit-char-p (car lista))) nil)
         (t (identificatore-port (cdr lista))))) 
 
-;controllo query         
+					;controllo query         
 (defun query-id (lista)
   (cond ((null lista) T)
         ((eq (car lista) #\#) nil)
         (t (query-id (cdr lista))))) 
 
-;lunghezza lista
+					;lunghezza lista
 (defun lung (lista)
   (cond ((null lista) 0)
         (t (+ 1 (lung (cdr lista))))))
 
-;controllo che sia un ip
+					;controllo che sia un ip
 (defun ip (lista)
   (and (ip-cont lista 1)
        (ip-num lista)))
 
-;controllo correttezza ordine elementi in ip
+					;controllo correttezza ordine elementi in ip
 (defun ip-cont (lista cont)
   (cond ((and (< cont 4) 
               (digit-char-p (car lista))) 
@@ -320,7 +327,7 @@
         ((and (null lista) (or (= cont 1) (= cont 4))) 
          T)))
 
-;controllo valore numeri ip
+					;controllo valore numeri ip
 (defun ip-num (lista)
   (let ((n1 (to-num (first lista)))
         (n2 (to-num (second lista)))
@@ -331,7 +338,7 @@
           ((<= (somma n1 n2 n3) 255) (ip-num rest))
           (t (error "ip non valido")))))
 
-;identificatore per id 44 e id8  
+					;identificatore per id 44 e id8  
 (defun identificatore-id44 (lista)
   (cond ((null lista) T)
         ((and (not (alphanumericp (car lista)))
@@ -344,7 +351,7 @@
         ((not (alphanumericp (car lista))) nil)
         (t (identificatore-id8 (cdr lista)))))
 
-;check zos
+					;check zos
 (defun check-zos (lista)
   (let ((id44 (or (list-id lista #\() lista))
         (id8 (id-list lista #\()))
@@ -357,11 +364,11 @@
                    (<= (lung id8) 8)) T
             nil)))))
 
-;somma
+					;somma
 (defun somma (n1 n2 n3)
   (+ (* n1 100) (* n2 10) n3))
 
-;conversione
+					;conversione
 (defun to-num (n)
   (cond ((equal n #\0) 0)
         ((equal n #\1) 1)
@@ -384,5 +391,4 @@
 (defun aut ()
   (and (defparameter userinfo-def nil)
        (defparameter host-def nil)))
-
 
