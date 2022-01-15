@@ -20,3 +20,5 @@ Gestione errori:
 Nei metodi sono sempre presenti controlli riguardo la possibile presenza di caratteri errati o sequenze non corrette di caratteri e, in caso di errore, 
 il programma si ferma stampando a schermo un messaggio di errore specifico per ogni caso.
 
+Iformazioni aggiuntive:
+Per la gestione di ip, è stato considerato esclusivamente ip di 15 caratteri e solo in questo caso viene fatto il controllo sui valori numerici di ip.
