@@ -5,7 +5,7 @@
 ;;;Inizializzazione della struttura utilizzata.
 (defstruct uri scheme userinfo host port path query fragment)
 
-;;;Gestione di I/O attraverso i metodi uri-display e uti-stampa.
+;;;Gestione di I/O attraverso i metodi uri-display e uri-stampa.
 (defun uri-display (stringa &optional stream)
   (if (null stream)
       (if (null (uri-stampa stringa)) 
