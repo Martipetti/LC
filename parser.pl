@@ -1,3 +1,8 @@
+/* Componenti del gruppo:
+   Merlo Daniela 866380
+   Pettinari Martino 866496
+*/
+
 %%%-*- Mode: Prolog -*- 
 
 uri_parse(URIString, URI) :-
