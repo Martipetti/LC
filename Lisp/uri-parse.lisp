@@ -1,9 +1,11 @@
-;Componenti del gruppo:
-; Merlo Daniela 866380
-; Pettinari Martino 866496
+;;;Componenti del gruppo:
+;;;Merlo Daniela 866380
+;;;Pettinari Martino 866496
 
+;;;Inizializzazione della struttura utilizzata.
 (defstruct uri scheme userinfo host port path query fragment)
 
+;;;Gestione di I/O attraverso i metodi uri-display e uti-stampa.
 (defun uri-display (stringa &optional stream)
   (if (null stream)
       (if (null (uri-stampa stringa)) 
@@ -23,6 +25,7 @@
 		    )))
 
 
+;;;Usato quando stream risulta null quindi per stampare sul prompt.
 (defun uri-stampa (stringa)
   (format t "~d    ~d~%" "Scheme: " (uri-scheme stringa))
   (format t "~d  ~d~%" "Userinfo: " (uri-userinfo stringa))
@@ -32,6 +35,10 @@
   (format t "~d     ~d~%" "Query: " (uri-query stringa))
   (format t "~d  ~d~%" "Fragment: " (uri-fragment stringa)))
 
+;;;Metodo principale che, dopo il parsing dell'uri, 
+;;;asegna valori alla struttura. Avvia il parsing creando
+;;;una lista tramite il metodo coerce e passandola a set-scheme
+;;;che avvia i controlli per il parsing.
 (defun uri-parse (stringa) 
   (let ((lista (coerce stringa 'list)))
     (if (null stringa) (error "stringa vuota")
@@ -44,7 +51,10 @@
                      :query query-def
                      :fragment fragment-def)))))
 
-;;;metodo di gestione dello scheme (controllare)       
+;;;Metodo di gestione dello scheme, 
+;;;in base alla sintassi che si trova nello scheme,
+;;;passa il resto della lista al metodo successivo,
+;;;sottraendo la parte di scheme.
 (defun set-scheme (lista)
   (if (null (check #\: lista)) 
       (error "URI non valida")
@@ -66,7 +76,7 @@
                       (autorithy rest))))))))
 
 
-;;;gestione mailto
+;;;Metodo richiamato quando nello scheme è presente la sintassi mailto.
 (defun set-mailto (lista)
   (and (if (check #\@ lista)
            (let ((userinfo (list-id lista #\@))
@@ -89,7 +99,8 @@
                   (defparameter host-def nil)))))
        (coda)))
 
-;;;gestione news
+;;;Metodo richiamato quando nello scheme 
+;;;è presente la sintassi news.
 (defun set-news (lista)
   (if (null lista)
       (and  (aut)
@@ -104,7 +115,8 @@
                (coda))
         (error "sistassi news non valida")))))
 
-;;;gestione tel e fax
+;;;Metodo richiamato quando nello scheme 
+;;;è presente la sintassi tel o fax.
 (defun set-tel (lista)
   (if (null lista)
       (and  (aut) 
@@ -115,7 +127,7 @@
              (coda))
       (error "sistassi tel e fax non valida"))))                      
 
-					;metodo di gestione authority 
+;;;Metodo richiamato quando nello scheme è presente la sintassi mailto.
 (defun autorithy (lista)
   (let ((id1 (car lista))
         (id2 (car (cdr lista)))
@@ -131,7 +143,7 @@
           (and (aut)
                (coda)))))))
 
-					;metodo per gestione di path, query, id e fragment
+;;;Metodo di gestione per userinfo.
 (defun set-userinfo (lista)
   (if (null (check #\@ lista)) 
       (and (defparameter userinfo-def nil) 
@@ -141,7 +153,7 @@
       (and (setq userinfo-def (coerce (list-id lista #\@) 'string)) 
            (set-host (id-list lista #\@))))))
 
-					;gestione host
+;;;Metodo di gestione per host.
 (defun set-host (lista)
   (if (null lista) (error "host non valida")
     (if (check #\: lista)
@@ -171,7 +183,7 @@
               (and (setq host-def (coerce lista 'string)) (coda)))
           (error "host non valida"))))))
 
-					;gestione port
+;;;Metodo di gestione per port.
 (defun set-port (lista)     
   (if (check #\/ lista) 
       (if (null (identificatore-port (list-id lista #\/))) 
@@ -185,7 +197,9 @@
            (defparameter fragment-def nil)))))
 
 
-					;gestione path
+;;;Metodo di gestione per path, 
+;;;in base a quale carattere identificatore si trova nella lista,
+;;;richiama il metodo sucessivo corretto, dopo aver inizializzato path.
 (defun set-path (lista)
   (if (null lista) 
       (and (defparameter path-def nil)
@@ -217,13 +231,14 @@
              (defparameter query-def nil) 
              (defparameter fragment-def nil))))))
 
-					;gestione path di zos, estensione di path per caso zos
+;;;Metodo gestione usato in set-path per zos 
+;;;(estensione di path per caso zos).
 (defun set-path-zos (lista)
   (if (check-zos lista)
       (defparameter path-def (coerce lista 'string))
     (error "zos non valido")))
 
-					;gestione query
+;;;Metodo di gestione per query.
 (defun set-query (lista)
   (if (null lista) (error "query non valida") 
     (if (check #\# lista) 
@@ -235,30 +250,36 @@
                                 (defparameter fragment-def nil))
         (error "query non valida")))))
 
-					;gestione fragment
+;;;Metodo di gestione per fragment.
 (defun set-fragment (lista)
   (if (null lista) (error "fragment non valido")
     (setq fragment-def (coerce lista 'string))))
 
-					;ritorna la lista da un id in poi
+;;;Da qui in poi sono presenti metodi utilizzati 
+;;;per la gestione o il controllo nel codice soprastante.
+					
+;;;;Metodo che ritorna la lista da un identificatore in poi.
 (defun id-list (lista id)
   (if (null lista) nil
     (if (equal (car lista) id) (cdr lista)
       (id-list (cdr lista) id))))
 
-					;ritorna la lista dall'inizio fino ad un certo id
+;;;Metodo che ritorna la lista dall'inizio 
+;;;fino ad un certo identificatore.
 (defun list-id (lista id)
   (if (null lista) nil
     (if (eq (car lista) id) '()
       (cons (car lista) (list-id (cdr lista) id)))))
 
-					;metodo di controllo del member
+;;;Metodo che verifica se un determinato 
+;;;identificatore è prensete nella lista.
 (defun check (id lista)
   (if (null (member id lista)) 
       nil
     T))
 
-					;controllo identificatore  
+;;;Controllo che i caratteri passati nella lista,
+;;;siano caratteri validi.
 (defun identificatore-id (lista)
   (cond ((null lista) T)
         ((or(eq (car lista) #\/)
@@ -268,7 +289,8 @@
             (eq (car lista) #\:)) nil)
         (T (identificatore-id (cdr lista)))))
 
-					;controllo identificatore path
+;;;Controllo che i caratteri passati nella lista,
+;;;siano caratteri validi per path.
 (defun identificatore-path (lista)
   (cond ((null lista) T)
         ((or(eq (car lista) #\/)
@@ -278,7 +300,8 @@
             (eq (car lista) #\:)) nil)
         (T (identificatore-path2 (cdr lista)))))        
 
-					;controllo identificatore path2
+;;;Controllo che i caratteri passati nella lista,
+;;;controllo identificatore path2.
 (defun identificatore-path2 (lista)
   (cond ((null lista) T)
         ((or
