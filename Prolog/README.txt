@@ -18,10 +18,10 @@ Abbiamo tenuto come porta di default ‘80’ anche per le sintassi speciali
 In tutti i casi, come da specifiche, in presenza della parte di URI che comprende: Path, Query e Fragment è obbligatorio che prima ci sia il carattere ‘/ ‘ 
 
 Esempi di stringhe accettate e non accettate:
-•	“http:path”   false
-•	“http:/?query  true
-•	“http:/#fragment”  true
-•	“zos://unimib.it”  false 
+•	“http:path”  --> false
+•	“http:/?query -->  true
+•	“http:/#fragment” -->  true
+•	“zos://unimib.it” --> false 
 
 Gestione errori:
 Nei metodi sono sempre presenti controlli riguardo la possibile presenza di caratteri errati o sequenze non corrette di caratteri e, in caso di errore, 
