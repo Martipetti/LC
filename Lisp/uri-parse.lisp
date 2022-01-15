@@ -37,9 +37,9 @@
   (format t "~d  ~d~%" "Fragment: " (uri-fragment stringa)))
 
 ;;;Metodo principale che, dopo il parsing dell'uri, 
-;;;asegna valori alla struttura. Avvia il parsing creando
-;;;una lista tramite il metodo coerce e passandola a set-scheme
-;;;che avvia i controlli per il parsing.
+;;;assegna valori alla struttura. 
+;;;Avvia il parsing creando una lista tramite il metodo coerce 
+;;;e passandola a set-scheme che avvia i controlli per il parsing.
 (defun uri-parse (stringa) 
   (let ((lista (coerce stringa 'list)))
     (if (null stringa) (error "stringa vuota")
@@ -100,8 +100,7 @@
                   (defparameter host-def nil)))))
        (coda)))
 
-;;;Metodo richiamato quando nello scheme 
-;;;è presente la sintassi news.
+;;;Metodo richiamato quando nello scheme è presente la sintassi news.
 (defun set-news (lista)
   (if (null lista)
       (and  (aut)
@@ -154,7 +153,9 @@
       (and (setq userinfo-def (coerce (list-id lista #\@) 'string)) 
            (set-host (id-list lista #\@))))))
 
-;;;Metodo di gestione per host.
+;;;Metodo di gestione per host, in base all'identificatore successivo, 
+;;;sottrae la parte di host e passa il resto della lista al metodo 
+;;;prestabilito.
 (defun set-host (lista)
   (if (null lista) (error "host non valida")
     (if (check #\: lista)
@@ -257,7 +258,7 @@
     (setq fragment-def (coerce lista 'string))))
 
 ;;;Da qui in poi sono presenti metodi utilizzati 
-;;;per la gestione o il controllo nel codice soprastante.
+;;;dal codice soprastante, per la gestione del parsing.
 					
 ;;;;Metodo che ritorna la lista da un identificatore in poi.
 (defun id-list (lista id)
@@ -273,7 +274,7 @@
       (cons (car lista) (list-id (cdr lista) id)))))
 
 ;;;Metodo che verifica se un determinato 
-;;;identificatore è prensete nella lista.
+;;;identificatore è presente nella lista.
 (defun check (id lista)
   (if (null (member id lista)) 
       nil
@@ -330,13 +331,13 @@
         ((null (digit-char-p (car lista))) nil)
         (t (identificatore-port (cdr lista))))) 
 
-;;;Metodo di controllo per query     
+;;;Metodo di controllo per query.    
 (defun query-id (lista)
   (cond ((null lista) T)
         ((eq (car lista) #\#) nil)
         (t (query-id (cdr lista))))) 
 
-;;;Metodo che ritorna la lunghezza della lista
+;;;Metodo che ritorna la lunghezza della lista.
 (defun lung (lista)
   (cond ((null lista) 0)
         (t (+ 1 (lung (cdr lista))))))
@@ -395,12 +396,12 @@
                    (<= (lung id8) 8)) T
             nil)))))
 
-;;;Restutiusce la somma tra i tre numeri passari in input
+;;;Restitusce la somma tra i tre numeri passari in input
 ;;;per controllare i valori di ip.
 (defun somma (n1 n2 n3)
   (+ (* n1 100) (* n2 10) n3))
 
-;;;Conversione da valore lista a numeri
+;;;Conversione da valore lista a numeri.
 (defun to-num (n)
   (cond ((equal n #\0) 0)
         ((equal n #\1) 1)
@@ -415,7 +416,7 @@
         (t nil)))
 
 ;;;Metodi per evitare scrittura ripetitiva del codice 
-;;;in determinati metodi
+;;;in determinati metodi.
 (defun coda ()
   (and (setq port-def "80")
        (defparameter path-def nil)
