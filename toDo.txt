@@ -1,2 +1,0 @@
-review code prolog
-uri-display LISP con stream
