@@ -22,8 +22,7 @@
 		    (format out "~d      ~d~%" "Path: " (uri-path stringa))
 		    (format out "~d     ~d~%" "Query: " (uri-query stringa))
 		    (format out "~d  ~d~%" "Fragment: " (uri-fragment stringa))
-		    (write (uri-stampa stringa))                      
-		    )))
+		    (write (uri-stampa stringa)))))
 
 
 ;;;Usato quando stream risulta null quindi per stampare sul prompt.
