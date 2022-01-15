@@ -61,8 +61,12 @@
       (error "URI non valida")
     (if (null (identificatore-id (list-id lista #\:))) 
         (error "scheme non valido")
+	;;;assegna a scheme la parte di lista prima dei due punti.
       (let ((scheme (list-id lista #\:))
+	;;;assegna a rest la parte di lista dopo i due punti.
             (rest (id-list lista #\:)))
+	;;;in base a quale condizione risulta vera, 
+	;;;passa il controllo al metodo corretto
         (cond ((equalp scheme '(#\m #\a #\i #\l #\t #\o))
                (and (set-mailto rest) 
                     (setq scheme-def (coerce scheme 'string))))
@@ -158,6 +162,8 @@
 ;;;prestabilito.
 (defun set-host (lista)
   (if (null lista) (error "host non valida")
+      ;;;controlla che ci siano i due punti e 
+      ;;;passa il controllo a port 
     (if (check #\: lista)
         (if (and (= (lung (list-id lista #\:)) 15)
                  (ip (list-id lista #\:)))
@@ -167,6 +173,8 @@
               (error "host non valida")
             (and (setq host-def (coerce (list-id lista #\:) 'string))
                  (set-port (id-list lista #\:)))))
+	;;;controlla che ci sia lo slash e
+	;;;passa controllo a path
       (if (check #\/ lista)
           (if (and (= (lung (list-id lista #\/)) 15)
                    (ip (list-id lista #\/)))
@@ -178,6 +186,7 @@
               (and (setq host-def (coerce (list-id lista #\/) 'string))
                    (setq port-def "80") 
                    (set-path (id-list lista #\/))))) 
+	  ;;;se nessuno dei casi risulta vero, il parsing si conclude
         (if (identificatore-host lista) 
             (if (and (= (lung lista) 15)
                      (ip lista))
@@ -202,11 +211,15 @@
 ;;;Metodo di gestione per path, 
 ;;;in base a quale carattere identificatore si trova nella lista,
 ;;;richiama il metodo sucessivo corretto, dopo aver inizializzato path.
+;;;Il metodo in ogni caso controlla la possibilità della 
+;;;scheme-syntax zos.
 (defun set-path (lista)
   (if (null lista) 
       (and (defparameter path-def nil)
            (defparameter query-def nil)
            (defparameter fragment-def nil)) 
+      ;;;controlla la presenta del punto di domanda
+      ;;;e passa controllo a query
     (if (check #\? lista)
         (and (if (null (list-id lista #\?))
                  (defparameter path-def nil)
@@ -215,7 +228,9 @@
                  (if (identificatore-path (list-id lista #\?))
                      (setq path-def (coerce (list-id lista #\?) 'string))
                    (error "path non valida"))))
-             (set-query (id-list lista #\?)))   
+             (set-query (id-list lista #\?)))  
+	;;;controlla presenza del cancelletto
+	;;;e passa controllo a fragment
       (if (check #\# lista)
           (and (if (null (list-id lista #\#))
                    (defparameter path-def nil)
@@ -224,7 +239,9 @@
                    (if (identificatore-path (list-id lista #\#))
                        (setq path-def (coerce (list-id lista #\#) 'string))
                      (error "path non valida"))))
-               (set-query (id-list lista #\#)))    
+               (set-fragment (id-list lista #\#)))  
+	  ;;;se nessuno dei casi prima risulta valido
+	  ;;;il parsing termina
         (and (if (equalp scheme-def "zos")
                  (set-path-zos lista)
                (if (identificatore-path lista)
