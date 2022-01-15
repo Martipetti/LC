@@ -3,6 +3,7 @@
 ;;;Pettinari Martino 866496
 
 ;;;Inizializzazione della struttura utilizzata.
+;;;Valori istanziati nel metodo uri-parse.
 (defstruct uri scheme userinfo host port path query fragment)
 
 ;;;Gestione di I/O attraverso i metodi uri-display e uri-stampa.
@@ -290,7 +291,8 @@
         (T (identificatore-id (cdr lista)))))
 
 ;;;Controllo che i caratteri passati nella lista,
-;;;siano caratteri validi per path.
+;;;siano caratteri validi per path con i metodi:
+;;;identificatore-path e identificatore-path2.
 (defun identificatore-path (lista)
   (cond ((null lista) T)
         ((or(eq (car lista) #\/)
@@ -300,8 +302,6 @@
             (eq (car lista) #\:)) nil)
         (T (identificatore-path2 (cdr lista)))))        
 
-;;;Controllo che i caratteri passati nella lista,
-;;;controllo identificatore path2.
 (defun identificatore-path2 (lista)
   (cond ((null lista) T)
         ((or
@@ -311,7 +311,8 @@
           (eq (car lista) #\:)) nil)
         (T (identificatore-path2 (cdr lista)))))         
 
-					;controllo identificatore host
+;;;Controllo che i caratteri passati nella lista,
+;;;siano caratteri validi per host.
 (defun identificatore-host (lista)
   (cond ((null lista) T)
         ((or(eq (car lista) #\/)
@@ -322,29 +323,31 @@
             (eq (car lista) #\:)) nil)
         (T (identificatore-id (cdr lista)))))  
 
-					;controllo identificatore port
+;;;Controllo che i caratteri passati nella lista,
+;;;siano validi per port.
 (defun identificatore-port (lista)
   (cond ((null lista) T)
         ((null (digit-char-p (car lista))) nil)
         (t (identificatore-port (cdr lista))))) 
 
-					;controllo query         
+;;;Metodo di controllo per query     
 (defun query-id (lista)
   (cond ((null lista) T)
         ((eq (car lista) #\#) nil)
         (t (query-id (cdr lista))))) 
 
-					;lunghezza lista
+;;;Metodo che ritorna la lunghezza della lista
 (defun lung (lista)
   (cond ((null lista) 0)
         (t (+ 1 (lung (cdr lista))))))
 
-					;controllo che sia un ip
+;;;Controllo che la lista passata sia un ip,
+;;;il metodo richiama altri metodi.
 (defun ip (lista)
   (and (ip-cont lista 1)
        (ip-num lista)))
 
-					;controllo correttezza ordine elementi in ip
+;;;Controllo correttezza ordine elementi in ip.
 (defun ip-cont (lista cont)
   (cond ((and (< cont 4) 
               (digit-char-p (car lista))) 
@@ -354,7 +357,7 @@
         ((and (null lista) (or (= cont 1) (= cont 4))) 
          T)))
 
-					;controllo valore numeri ip
+;;;Controllo valore numeri ip.
 (defun ip-num (lista)
   (let ((n1 (to-num (first lista)))
         (n2 (to-num (second lista)))
@@ -365,7 +368,8 @@
           ((<= (somma n1 n2 n3) 255) (ip-num rest))
           (t (error "ip non valido")))))
 
-					;identificatore per id 44 e id8  
+;;;Metodi per gestire e controllore la sintassi zos
+;;;quindi per id 44 e id8.
 (defun identificatore-id44 (lista)
   (cond ((null lista) T)
         ((and (not (alphanumericp (car lista)))
@@ -378,7 +382,7 @@
         ((not (alphanumericp (car lista))) nil)
         (t (identificatore-id8 (cdr lista)))))
 
-					;check zos
+;;;Controllo della lunghezza si id44 e id8.
 (defun check-zos (lista)
   (let ((id44 (or (list-id lista #\() lista))
         (id8 (id-list lista #\()))
@@ -391,11 +395,12 @@
                    (<= (lung id8) 8)) T
             nil)))))
 
-					;somma
+;;;Restutiusce la somma tra i tre numeri passari in input
+;;;per controllare i valori di ip.
 (defun somma (n1 n2 n3)
   (+ (* n1 100) (* n2 10) n3))
 
-					;conversione
+;;;Conversione da valore lista a numeri
 (defun to-num (n)
   (cond ((equal n #\0) 0)
         ((equal n #\1) 1)
@@ -409,6 +414,8 @@
         ((equal n #\9) 9)
         (t nil)))
 
+;;;Metodi per evitare scrittura ripetitiva del codice 
+;;;in determinati metodi
 (defun coda ()
   (and (setq port-def "80")
        (defparameter path-def nil)
