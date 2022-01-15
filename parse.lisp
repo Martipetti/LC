@@ -1,3 +1,7 @@
+;Componenti del gruppo:
+; Merlo Daniela 866380
+; Pettinari Martino
+
 (defstruct uri scheme userinfo host port path query fragment)
 
 (defun uri-display (stringa &optional stream)
