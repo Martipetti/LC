@@ -5,7 +5,9 @@ Progetto svolto da:
 - Daniela Merlo 866380
 
 Approccio al lavoro e composizione del programma:
-Per sviluppare il parser di stringhe URI, in prolog, siamo partiti gestendo la stringa in input come una lista di caratteri. Il programma è formato da vari metodi per la gestione delle componenti dell’URI. Ogni metodo verifica che la lista di caratteri data come argomento, rispetti la sintassi della componente dell’URI che sta gestendo; trovando un risultato positivo, trasforma la lista di caratteri in una stringa per poi istanziare la corrispettiva componente dell’URI.
+Per sviluppare il parser di stringhe URI, in prolog, siamo partiti gestendo la stringa in input come una lista di caratteri. Il programma è formato da vari 
+metodi per la gestione delle componenti dell’URI. Ogni metodo verifica che la lista di caratteri data come argomento, rispetti la sintassi della componente 
+dell’URI che sta gestendo; trovando un risultato positivo, trasforma la lista di caratteri in una stringa per poi istanziare la corrispettiva componente dell’URI.
 Come da specifiche abbiamo distinto 3 casi principali:
 -	URI con authority 
 -	URI senza authority
@@ -22,6 +24,7 @@ Esempi di stringhe accettate e non accettate:
 •	“zos://unimib.it”  false 
 
 Gestione errori:
-Nei metodi sono sempre presenti controlli riguardo la possibile presenza di caratteri errati o sequenze non corrette di caratteri e, in caso di errore, il programma stampa a video false. 
+Nei metodi sono sempre presenti controlli riguardo la possibile presenza di caratteri errati o sequenze non corrette di caratteri e, in caso di errore, 
+il programma stampa a video false. 
 
 
