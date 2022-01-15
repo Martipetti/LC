@@ -430,7 +430,7 @@ fragmentHastag(QueryRest, QueryRest, []).
    dell'URI
 */
 %%% Metodo identificazione stringa dello scheme
-stringId([C|Cs], Cs1, [C|Is]) :- 
+stringId([C | Cs], Cs1, [C | Is]) :- 
     C\='/',
     C\='?',
     C\='#',
