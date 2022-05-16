@@ -1,0 +1,26 @@
+Caso d'uso Registrazione Utente: 
+    Nome del caso d'uso: "Registrazione"
+    Portata: Trevel On
+    Livello: Obbiettivo utente 
+    Attore primario: UtenteGenerico
+    Parti Interessate e Interessi: 
+		- UtenteGenerico: L'attore ha come obbiettivo quello di registrarsi alla WebApp Travel On 
+    Pre-condizioni: L'attore non deve essere già registrato alla WebApp
+    Garanzia di successo: La registrazione avviene con successo ed è possibile autenticarsi con le credenziali fornite
+    Scenario principale di successo: 
+		1. L'utente avvia la procedura di registrazione
+		2. L'utente inserisce i propri dati anagrafici personali
+		3. L'utente inserisce un metodo di pagamento con le relative coordinate
+		4. Il sistema gestisce la richiesta
+		5. Il sitema notifica l'esito positivo della richiesta
+	Estensioni:
+		4a. L'utente inserisce i propri dati personali in modo errato
+			4a.1 Il sistema rifiuta la richiesta di registrazione
+			4a.2 Il sistema segnala l'errore 
+		4b. L'utente inserisce i dati relativi al metodo di pagamento in modo errato 
+		  	4b.1 Il sistema rifiuta la richiesta di registrazione
+			4b.2 Il sistema segnala l'errore 
+		4c. L'utente è già registrato
+			4c.1 Il sistema rifiuta la richiesta di registrazione
+			4c.2 Il sistema segnala l'errore e propone il login
+    Frequenze ripetizione: Frequenza prevista quando l'attore avvia la procedura per una nuova registrazione

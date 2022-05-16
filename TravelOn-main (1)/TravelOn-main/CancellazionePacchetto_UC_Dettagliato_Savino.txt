@@ -1,0 +1,18 @@
+ Caso d'uso Richiesta CancellazionePacchetto: 
+    Nome del caso d'uso: "CancellaPacchetto"
+    Portata: Trevel On
+    Livello: Obbiettivo utente 
+    Attore primario: Amministratore
+    Parti Interessate e Interessi: 
+		- Amministratore: L'attore ha come obbiettivo quello di cancellare dal catalogo un pacchetto vacanza
+    Pre-condizioni: L'attore deve aver essere autenticato come amministratore e il pacchetto deve essere presente nel catalogo
+    Garanzia di successo: Il sistema notifica l'amministratore sull'esito positivo della cancellazione
+    Scenario principale di successo: 
+		1. L'amministratore accede al pannello di aggiornamento del catalogo
+		2. L'amministratore richiede di effettuare la cancellazione del pacchetto selezionato
+		3. Il sistema prende in carico la richiesta ed effettua la cancellazione 
+		4. Il sistema notifica l'amministratore dell'esito positivo
+	Estensioni:
+		3a. Il sistema riscontra un errore
+			3a.1 Il sistema segnala errore con i relavi dettagli
+    Frequenze ripetizione: Frequenza prevista quando l'attore avvia la procedura per la cancellazione di un pacchetto dal catalogo 

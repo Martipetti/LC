@@ -1,0 +1,25 @@
+Caso d'uso Richiesta PrenotazioneCliente: 
+    Nome del caso d'uso: "PrenotazionePacchetto"
+    Portata: Trevel On
+    Livello: Obbiettivo utente 
+    Attore primario: UtenteRegistrato
+    Parti Interessate e Interessi: 
+		- UtenteRegistrato: L'attore ha come obbiettivo quello di richiedere la prenotazione di un pacchetto vacanza
+    Pre-condizioni: L'attore deve aver essere correttamente registrato
+    Garanzia di successo: Il sistema notifica l'utente sull'esito positivo della richiesta di prenotazione
+    Scenario principale di successo: 
+		1. L'utente visiona un pacchetto
+		2. L'utente richiede di effettuare una prenotazione al pacchetto
+		3. L'utente inserisce i dati necessari alla prenotazione ed effettua il pagamento dell'acconto
+		4. Il sistema gestisce la richiesta 
+		5. Il sistema notifica l'utente dell'esito positivo della prenotazione
+	Estensioni:
+		2a. L'utente non è registrato
+			2a.1 Il sistema segnala errore ed impedisce l'avanzamento della prenotazione
+		3a. L'utente inserisce dati non validi
+			3a.1 Il sistema segnala errore ed impedisce l'avanzamento della prenotazione
+		3b. Il sistema non riesce a finalizzare il pagamento
+			3b.1 Il sistema propone di ritentare il pagamento
+		4a. Il pacchetto non è più disponibile
+			4a.1 Il sistema segnala errore ed impedisce l'avanzamento della prenotazione
+    Frequenze ripetizione: Frequenza prevista quando l'attore avvia la procedura per la prenotazione di un pacchetto 

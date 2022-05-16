@@ -1,0 +1,26 @@
+Caso d'uso Richiesta Annullamento Prenotazione: 
+    Nome del caso d'uso: "AnnullaPrenotazione"
+    Portata: Trevel On
+    Livello: Obbiettivo utente 
+    Attore primario: UtenteRegistrato
+    Parti Interessate e Interessi: 
+		- UtenteRegistrato: L'attore ha come obbiettivo richiedere l'annullamento ad una prenotazione effettuata
+		- Operatore: L'attore rende effettivo l'annullamento della prenotazione e gestisce l'eventuale rimborso
+    Pre-condizioni: L'attore deve aver effettuato una prenotazione ad un servizio offerto, 
+					la stessa deve essere in corso di validità e non ancora usufruita
+    Garanzia di successo: Il sistema notifica l'utente sull'esito positivo della richiesta di annullamento relativa alla prenotazione
+    Scenario principale di successo: 
+		1. L'utente richiede la cancellazione di una prenotazione effettuata
+		2. L'operatore prende in carico la richiesta e la inoltra alle compagnie competenti 
+		3. Il sitema notifica l'esito positivo della richiesta 
+	Estensioni:
+		1a. L'utente ha già usufruito della prenotazione
+			1a.1 Il sistema non inoltra la richiesta a terzi
+			1a.2 Il sistema segnala l'esito negativo della richiesta 
+		1b. L'utente ha effettuato la richiesta ma la stessa è fuori dalle tempistiche di annullamento 
+			1b.1 L'operatore prende in carico e inoltra la richiesta alle compagnie competenti
+			1b.2 Il sistema notifica l'esito negativo della richiesta
+		1c. L'utente ha effettuato la richiest ad una prenotazione che non prevede annullamento; 
+		  	1c.1 L'operatore prende in carico e inoltra la richiesta alle compagnie competenti 
+			1c.2 Il sistema notifica l'esito negativo della richiesta
+    Frequenze ripetizione: Frequenza prevista quando l'attore avvia la procedura di richiesta di annullamento relativa ad una prenotazione
